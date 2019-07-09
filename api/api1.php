@@ -13,7 +13,7 @@
 header('Pragma: public');
 header('Expires: 0');
 header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
-// header('Content-Type: application/json; charset=utf-8');
+header('Content-Type: application/json; charset=utf-8');
 
 
 if($_POST) {
@@ -61,8 +61,6 @@ if ($safe_post['form_name_id']) {
   $items_names[] = 'Date';
   $items['date'] = date("d-m-Y H:i");
 
-  // var_dump($items);
-
   // FORM ID
   $form_name_id = sanitize_file_name($safe_post['form_name_id']);
   // FORM READABLE NAME
@@ -87,9 +85,6 @@ if ($safe_post['form_name_id']) {
 
     fwrite($json_file, $json_encode_file);
     fclose($json_file);
-    // var_dump($json_file_array);
-    // echo $json_encode_file;
-    // exit();
 
   } else {
 
@@ -98,7 +93,11 @@ if ($safe_post['form_name_id']) {
     $temp_array = json_decode($json_file_array, true);
     array_push($temp_array['items'], $items);
 
+    // VALIDATION (OPTIONAL)
     $validation = $temp_array['settings']['validation'] ? $temp_array['settings']['validation'] : $default_settings_array['validation'];
+
+    // MAIL SENDING (OPTIONAL)
+    $mail_sending = $temp_array['settings']['mail'] ? $temp_array['settings']['mail'] : $default_settings_array['mail'];
 
     if ($validation['validate'] && count($validation['validate_items'])) {
       validations($validation, $items);
@@ -109,11 +108,27 @@ if ($safe_post['form_name_id']) {
     $json_file = fopen('data/' . $form_json_file_name, 'w');
     fwrite($json_file, $json_encode_file);
     fclose($json_file);
-  }
 
-  
-  // MAIL SENDING (OPTIONAL)
-  $mail_sending = $temp_array['settings']['mail'] ? $temp_array['settings']['mail'] : $default_settings_array['mail'];
+    if ($mail_sending['send']) {
+      $subject = $mail_sending['subject'] . str_replace('_', ' ', $form_name);
+      $message_header = "<table style='padding:5px 15px;'><tr><th colspan='2'><h2><strong>" . $mail_sending['message_header'] ."</strong></h2></th></tr>";
+      $message_footer = "</table>";
+      $message = "";
+
+      foreach ($temp_array['items_names'] as $name) {
+        $message .= "<tr><th style='border-top:dotted 1px #000;border-left:dotted 1px #000;'><strong>{$name}</strong></th>";
+      }
+
+      foreach ($items as $key => $value) {
+        if ($key !== "form_name" and $key !== "form_name_id" and $key !== "g-recaptcha-response") {
+          $message .= "<td style='border-top:dotted 1px #000;'>{$value}</td>";
+        }
+      }
+
+      $message = $message_header.$message.$message_footer;
+
+    }
+  }
 
   // COMPOSE HTML TABLE
 
