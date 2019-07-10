@@ -20,4 +20,4 @@ yarn-error.log*
 *.sln
 *.sw?
 *.json
-api/data/form_reg_sportan_pt_hogim2019.json
+api/data/*
