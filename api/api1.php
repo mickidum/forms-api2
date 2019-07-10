@@ -38,6 +38,7 @@ $default_settings_array = [
   'mail' => [
     'send' => false,
     'to' => 'usermail@example.com',
+    'from' => 'siteowner',
     'subject' => 'New message from ',
     'message_header' => 'New Subscriber Added'
   ]
@@ -103,78 +104,58 @@ if ($safe_post['form_name_id']) {
       validations($validation, $items);
     }
 
+    
+
+    if ($mail_sending['send']) {
+      $to = $mail_sending['to'];
+      $headers = 'MIME-Version: 1.0' . "\r\n";
+      $headers .= 'Content-type: text/html; charset=UTF-8' . "\r\n";
+      $headers .= 'From: ' . $mail_sending['from'] . '@' . $_SERVER['HTTP_HOST'];
+
+      $subject = $mail_sending['subject'] . ' - ' . str_replace('_', ' ', $form_name);
+
+      $message_header = "<table style='border: solid 1px #000; padding:5px 15px;'><tr><th colspan='2'><h2><strong>" . $mail_sending['message_header'] ."</strong></h2></th></tr>";
+      $message_footer = "</table>";
+      $message = '';
+      foreach ($safe_post as $key => $value) {
+        if (is_array($value)) {
+          $value = implode(', ', $value);
+        }
+        if ($key !== "form_name" and $key !== "form_name_id") {
+          $message .= "<tr><th style='text-align: inherit; padding: 5px 10px; border-top:dotted 1px #000;border-left:dotted 1px #000;'><strong>{$key}</strong></th><td style='padding: 5px 10px; border-top:dotted 1px #000;'>{$value}</td></tr>";
+        }
+      }
+
+      // foreach ($temp_array['settings']['items_names'] as $name) {
+      //   $message .= "<th style='border-top:dotted 1px #000;border-left:dotted 1px #000;'><strong>{$name}</strong></th>";
+      // }
+      // $message .= "</tr><tr>";
+      // foreach ($items as $key => $value) {
+      //   if (is_array($value)) {
+      //     $value = implode(', ', $value);
+      //   }
+      //   if ($key !== "form_name" and $key !== "form_name_id" and $key !== "g-recaptcha-response") {
+      //     $message .= "<td style='border-top:dotted 1px #000;'>{$value}</td>";
+      //   }
+      // }
+      // $message .= "</tr>";
+
+      $message = $message_header.$message.$message_footer;
+
+      @mail($to, $subject, $message, $headers);
+    }
+
     $json_encode_file = json_encode($temp_array, JSON_UNESCAPED_UNICODE);
 
     $json_file = fopen('data/' . $form_json_file_name, 'w');
     fwrite($json_file, $json_encode_file);
     fclose($json_file);
-
-    if ($mail_sending['send']) {
-      $subject = $mail_sending['subject'] . str_replace('_', ' ', $form_name);
-      $message_header = "<table style='padding:5px 15px;'><tr><th colspan='2'><h2><strong>" . $mail_sending['message_header'] ."</strong></h2></th></tr>";
-      $message_footer = "</table>";
-      $message = "";
-
-      foreach ($temp_array['items_names'] as $name) {
-        $message .= "<tr><th style='border-top:dotted 1px #000;border-left:dotted 1px #000;'><strong>{$name}</strong></th>";
-      }
-
-      foreach ($items as $key => $value) {
-        if ($key !== "form_name" and $key !== "form_name_id" and $key !== "g-recaptcha-response") {
-          $message .= "<td style='border-top:dotted 1px #000;'>{$value}</td>";
-        }
-      }
-
-      $message = $message_header.$message.$message_footer;
-
-    }
   }
-
-  // COMPOSE HTML TABLE
-
-// $subject = 'הרשמה חדשה התקבלה מ- '.str_replace('_', ' ', $form_name);
-
-// $message_header = "<table style='direction:rtl; padding:5px 15px;'><tr><th colspan='2'><h2><strong>נרשם חדש לחוגים</strong></h2></th></tr>";
-// $message_footer = "</table>";     
-// $message = "";
-
-
-// foreach ($safe_post as $key => $value) {
-//   if ($key !== "form_name" and $key !== "form_name_id") {
-//     $message .= "<tr><th style='border-top:dotted 1px #000;border-left:dotted 1px #000;'><strong>{$key}</strong></th><td style='border-top:dotted 1px #000;'>{$value}</td>";
-//   }
-// }
-
-// $message = $message_header.$message.$message_footer;
-
-// ERROR HANDLING EXAMPLE:
-
-// if( $firstname && $secondname && $phone && strlen($firstname)>=2 && strlen($phone)>7){
-
-//   echo '{"valid": true, "message": "תודה על ההרשמה"}';
-
-//   fwrite($file, $html_content_header.$html_content);
-
-//   // MAIL SENDING
-//     $to = 'michael@zur4win.com'; 
-    
-//     $headers = 'MIME-Version: 1.0' . "\r\n" . 'Content-type: text/html; charset=UTF-8' . "\r\n";
-//     $headers .= 'From: sportan-pt-hogim@zur4win.com';
-//     // mail($to, $subject, $message, $headers);
-
-//   }
-
-//   else{
-//   echo '{"valid":false, "message":"יש טעויות בטופס"}'; 
-//   }
-
-
-
-
-}
 }
 
-// HELPERS
+}
+
+// HELPERS AND FUNCTIONS
 
 function test_input($data) {
   if (is_array($data)) {
