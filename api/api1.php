@@ -87,6 +87,13 @@ if ($safe_post['form_name_id']) {
     fwrite($json_file, $json_encode_file);
     fclose($json_file);
 
+    $resp_object = [
+      'success' => true,
+      'message' => 'OK'
+    ];
+
+    echo json_encode($resp_object);
+
   } else {
 
     $json_file_array = file_get_contents('data/' . $form_json_file_name);
@@ -102,9 +109,14 @@ if ($safe_post['form_name_id']) {
 
     if ($validation['validate'] && count($validation['validate_items'])) {
       validations($validation, $items);
-    }
+    } else {
+      $resp_object = [
+        'success' => true,
+        'message' => 'OK'
+      ];
 
-    
+      echo json_encode($resp_object);
+    }
 
     if ($mail_sending['send']) {
       $to = $mail_sending['to'];
