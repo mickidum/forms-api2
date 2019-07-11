@@ -1,1 +1,0 @@
-Id,firstname,secondname,phone,hogim,date,הרשמה לחוגים - ספורטן פתח תקוה

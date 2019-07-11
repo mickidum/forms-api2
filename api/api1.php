@@ -13,8 +13,10 @@
 header('Pragma: public');
 header('Expires: 0');
 header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
-header('Content-Type: application/json; charset=utf-8');
+// header('Content-Type: application/json; charset=utf-8');
 
+// var_dump($_SERVER);
+// exit();
 
 if($_POST) {
 
@@ -46,6 +48,7 @@ $default_settings_array = [
 
 if ($safe_post['form_name_id']) {
 
+  $form_list = [];
   $items = [];
   $items_names = [];
 
@@ -68,6 +71,46 @@ if ($safe_post['form_name_id']) {
   $form_name = $safe_post['form_name'] ? $safe_post['form_name'] : $form_name_id;
   // JSON FILE NAME
   $form_json_file_name = 'form_reg_' . $form_name_id . '.json';
+  $form_list_file_name = 'form-list.json';
+
+  $form_list_item = [
+    'form_id' => $form_name_id,
+    'title' => $form_name,
+    'last_update' => date(DATE_W3C)
+  ];
+  $form_list[] = $form_list_item;
+
+  if (!file_exists('settings/' . $form_list_file_name)) {
+
+    $settings_file = fopen('settings/' . $form_list_file_name, 'w');
+    $form_list_json = json_encode($form_list);
+    fwrite($settings_file, $form_list_json);
+    fclose($settings_file);
+
+  } else {
+
+    $form_list_json = file_get_contents('settings/' . $form_list_file_name);
+    $form_temp_array = json_decode($form_list_json, true);
+    $form_exists = true;
+
+    foreach ($form_temp_array as $form) {
+      if ($form['form_id'] === $form_name_id) {
+        $form['last_update'] = date(DATE_W3C);
+        $form_exists = true;
+      } else {
+        $form_exists = false;
+      }
+    }
+
+    if(!$form_exists) {
+      array_push($form_temp_array, $form_list_item);
+    }
+
+    $settings_file = fopen('settings/' . $form_list_file_name, 'w');
+    $form_list_json = json_encode($form_temp_array);
+    fwrite($settings_file, $form_list_json);
+    fclose($settings_file);
+  }
 
   if (!file_exists('data/' . $form_json_file_name)) {
 
