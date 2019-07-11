@@ -76,6 +76,7 @@ if ($safe_post['form_name_id']) {
   $form_list_item = [
     'form_id' => $form_name_id,
     'title' => $form_name,
+    'source' => $_SERVER['HTTP_REFERER'],
     'last_update' => date(DATE_W3C)
   ];
   $form_list[] = $form_list_item;
@@ -83,7 +84,7 @@ if ($safe_post['form_name_id']) {
   if (!file_exists('settings/' . $form_list_file_name)) {
 
     $settings_file = fopen('settings/' . $form_list_file_name, 'w');
-    $form_list_json = json_encode($form_list);
+    $form_list_json = json_encode($form_list, JSON_UNESCAPED_UNICODE);
     fwrite($settings_file, $form_list_json);
     fclose($settings_file);
 
@@ -95,19 +96,21 @@ if ($safe_post['form_name_id']) {
 
     foreach ($form_temp_array as $form) {
       if ($form['form_id'] === $form_name_id) {
-        $form['last_update'] = date(DATE_W3C);
+        // $form['last_update'] = date(DATE_W3C);
+        $form = $form_list_item;
         $form_exists = true;
-      } else {
-        $form_exists = false;
+        var_dump($form);
       }
+      
     }
+    exit();
 
     if(!$form_exists) {
       array_push($form_temp_array, $form_list_item);
     }
 
     $settings_file = fopen('settings/' . $form_list_file_name, 'w');
-    $form_list_json = json_encode($form_temp_array);
+    $form_list_json = json_encode($form_temp_array, JSON_UNESCAPED_UNICODE);
     fwrite($settings_file, $form_list_json);
     fclose($settings_file);
   }
@@ -135,13 +138,16 @@ if ($safe_post['form_name_id']) {
       'message' => 'OK'
     ];
 
-    echo json_encode($resp_object);
+    echo json_encode($resp_object, JSON_UNESCAPED_UNICODE);
 
   } else {
 
     $json_file_array = file_get_contents('data/' . $form_json_file_name);
     
     $temp_array = json_decode($json_file_array, true);
+
+    $temp_array['form_name'] = $form_name;
+
     array_push($temp_array['items'], $items);
 
     // VALIDATION (OPTIONAL)
@@ -158,7 +164,7 @@ if ($safe_post['form_name_id']) {
         'message' => 'OK'
       ];
 
-      echo json_encode($resp_object);
+      echo json_encode($resp_object, JSON_UNESCAPED_UNICODE);
     }
 
     if ($mail_sending['send']) {
