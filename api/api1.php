@@ -92,23 +92,22 @@ if ($safe_post['form_name_id']) {
 
     $form_list_json = file_get_contents('settings/' . $form_list_file_name);
     $form_temp_array = json_decode($form_list_json, true);
-    $form_exists = true;
+    // $form_exists = false;
 
-    foreach ($form_temp_array as $form) {
-      if ($form['form_id'] === $form_name_id) {
-        // $form['last_update'] = date(DATE_W3C);
-        $form = $form_list_item;
-        $form_exists = true;
-        var_dump($form);
+    foreach ($form_temp_array as $index => $form) {
+      if ($form['form_id'] == $form_name_id) {
+        array_splice($form_temp_array, $index, 1);
+        // $form_exists = true;
       }
-      
     }
-    exit();
+    // var_dump($form_temp_array);
+    // exit();
 
-    if(!$form_exists) {
-      array_push($form_temp_array, $form_list_item);
-    }
+    // if(!$form_exists) {
+    //   array_push($form_temp_array, $form_list_item);
+    // }
 
+    array_push($form_temp_array, $form_list_item);
     $settings_file = fopen('settings/' . $form_list_file_name, 'w');
     $form_list_json = json_encode($form_temp_array, JSON_UNESCAPED_UNICODE);
     fwrite($settings_file, $form_list_json);
