@@ -35,7 +35,6 @@ elseif(isset($_POST['submit'])){
 	<style>
 		.error {
 			position: absolute;
-	    /* max-width: 320px; */
 	    text-align: center;
 	    width: 100%;
 	    left: 0;

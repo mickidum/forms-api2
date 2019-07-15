@@ -4,6 +4,11 @@
 # Header set Access-Control-Allow-Methods "GET,PUT,POST,DELETE"
 # Header set Access-Control-Allow-Headers "Content-Type, Authorization"
 
+<FilesMatch "\.(ini|psd|log|sh|csv|json|html|data|settings|env)$">
+Order allow,deny
+Deny from all
+</FilesMatch>
+
 <FilesMatch "\.(css|flv|gif|htm|html|ico|jpe|jpeg|jpg|js|mp3|mp4|png|pdf|swf|txt)$">
 	<IfModule mod_expires.c>
 		ExpiresActive Off

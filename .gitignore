@@ -5,6 +5,7 @@ node_modules
 # local env files
 .env.local
 .env.*.local
+.env
 
 # Log files
 npm-debug.log*
@@ -22,3 +23,4 @@ yarn-error.log*
 *.json
 api/data/*.json
 api/settings/*.json
+.env

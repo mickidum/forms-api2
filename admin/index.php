@@ -11,17 +11,11 @@ $dotenv->load();
 
 $app = new Slim\App;
 
-$container = $app->getContainer();
-
-$container["jwt"] = function ($container) {
-    return new StdClass;
-};
 
 $app->add(new Tuupola\Middleware\JwtAuthentication([
-		"attribute" => "jwt",
     "secure" => getenv('SECURE'),
     "secret" => getenv('JWT_SECRET'),
-    "ignore" => ["/token", "/"],
+    "ignore" => ["/token"],
     "error" => function ($response, $arguments) {
         $data["status"] = "error";
         $data["message"] = $arguments["message"];
@@ -68,6 +62,27 @@ $app->post('/token', function (Request $request, Response $response, array $args
 
 $app->get('/mic', function (Request $request, Response $response, array $args) {
 	return $response->withJson(['test' => 'ok'], 201);
+});
+
+$app->get('/getlist', function (Request $request, Response $response, array $args) {
+	if (file_exists('../api/settings/form-list.json')) {
+		$data = file_get_contents('../api/settings/form-list.json');
+		$data = json_decode($data, true);
+		$response = $response->withJson($data, 200, JSON_UNESCAPED_UNICODE);
+  }
+
+  return $response;
+});
+
+$app->get('/getform/{form}', function (Request $request, Response $response, array $args) {
+	$name = $args['form'];
+	if (file_exists('../api/data/form_reg_' . $name . '.json')) {
+    $data = file_get_contents('../api/data/form_reg_' . $name . '.json');
+    $data = json_decode($data, true);
+		$response = $response->withJson($data, 200, JSON_UNESCAPED_UNICODE);
+  }
+
+  return $response;
 });
 
 $app->run();
