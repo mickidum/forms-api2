@@ -21,7 +21,7 @@ $app->add(new Tuupola\Middleware\JwtAuthentication([
 		"attribute" => "jwt",
     "secure" => getenv('SECURE'),
     "secret" => getenv('JWT_SECRET'),
-    "ignore" => ["/token"],
+    "ignore" => ["/token", "/"],
     "error" => function ($response, $arguments) {
         $data["status"] = "error";
         $data["message"] = $arguments["message"];
