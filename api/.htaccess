@@ -1,4 +1,4 @@
-<FilesMatch "\.(ini|psd|log|sh|csv|html|data|settings)$">
+<FilesMatch "\.(ini|psd|log|sh|csv|json|html|data|settings)$">
 Order allow,deny
 Deny from all
 

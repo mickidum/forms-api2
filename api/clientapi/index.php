@@ -19,17 +19,17 @@ session_start();
 
 $app = new \Slim\App;
 
-$app->add(function ($request, $response, $next) {
-	if (empty($_SESSION['logged'])) {
-		$response = $response->withJson([
-			'error' => 403,
-			'message' => 'not authorized'
-		]);
-	} else {
-		$response = $next($request, $response);
-	}
-	return $response;
-});
+// $app->add(function ($request, $response, $next) {
+// 	if (empty($_SESSION['logged'])) {
+// 		$response = $response->withJson([
+// 			'error' => 403,
+// 			'message' => 'not authorized'
+// 		]);
+// 	} else {
+// 		$response = $next($request, $response);
+// 	}
+// 	return $response;
+// });
 
 $app->get('/getlist', function (Request $request, Response $response, array $args) {
 	if (file_exists('../settings/form-list.json')) {

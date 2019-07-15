@@ -1,36 +1,28 @@
 <?php 
-session_start();
-if(@$_SESSION['logged']){ 
-    header("Location: api/list.php"); 
-    exit; 
-} 
-
-// username = 'admin'
-// password = 'admin'
-$users = array(
-	// !!! CHANGE THIS WITH GENERATED STRING FROM hashme.php HELPER !!!
-	"sportan" => "ae92bee5080ffa3533774ef98ec7858b08a02fed6778ab5d2043d0c64028e2d6"
-);
-
-
-if(isset($_POST['submit'])){
-	
-	$user = $_POST['username']; 
-  $pass = hash('sha256', $_POST['password']); 
-  foreach ($users as $username => $password) {
-  	if ($username === $user and $password === $pass) {
-			$_SESSION['logged'] = TRUE;
-			$_SESSION['username'] = $user;
-			header("Location: api/list.php");
-			exit;
-		}
-  }
-	 echo '<h5 style="color:red;position:absolute;top: 5px;left: 5px; border: solid; padding: 5px;">Incorrect login or password</h5>';
+if (!file_exists('.env')) {
+	echo "Exists";
 }
+elseif(isset($_POST['submit'])){
+	
+	if (!empty($_POST['login']) and !empty($_POST['password']) and strlen($_POST['password']) > 4) {
+		
+	}
+	$login = $_POST['login']; 
+  $password = hash('sha256', $_POST['password']); 
+  $key = hash('sha256', time());
+
+  $create_env_string = 'JWT_SECRET='. $key . "\r\n";
+  $create_env_string .= 'SECURE=false' . "\r\n";
+  $create_env_string .= 'LOGIN='. $login . "\r\n";
+  $create_env_string .= 'PASSWORD='. $password . "\r\n";
+
+ 	$env = fopen('.env', 'w');
+ 	fwrite($env, $create_env_string);
+ 	fclose($env);
+	// echo $create_env_string;
+}
+
 ?>
-
-
-
 
 <!DOCTYPE html>
 <html lang="en">
@@ -68,10 +60,10 @@ if(isset($_POST['submit'])){
 	<div class="all-wrap">
 		
 		<div class="all-wrap-inner">
-			<h1>Login to dashboard</h1>
+			<h1>Create New User</h1>
 			<form id="login" method="post"  autocomplete="off"> 
 			    <label>User Name
-				    <input type="text" name="username">
+				    <input type="text" name="login">
 				  </label>
 			    <label>Password
 				    <input type="password" name="password"  autocomplete="new-password">
@@ -80,14 +72,5 @@ if(isset($_POST['submit'])){
 			</form>
 		</div>
 	</div>
-
-
-	<!-- <script>
-		window.onload = function() {
-			setTimeout(function(){
-				document.getElementById('login').reset();
-			},300);
-		}
-	</script> -->
 </body>
 </html>
