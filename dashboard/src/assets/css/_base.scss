@@ -1,0 +1,14 @@
+html, button, input, select, textarea,
+.pure-g [class *= "pure-u"] {
+    /* Set your content font stack here: */
+  font-family: -apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica Neue,Arial,sans-serif;
+}
+*, :after, :before {
+	box-sizing: border-box;
+}
+* {
+    -webkit-font-smoothing: antialiased;
+}
+* {
+	outline: none;
+}

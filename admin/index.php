@@ -11,6 +11,19 @@ $dotenv->load();
 
 $app = new Slim\App;
 
+// CORS
+$app->options('/{routes:.+}', function ($request, $response, $args) {
+    return $response;
+});
+
+$app->add(function ($req, $res, $next) {
+    $response = $next($req, $res);
+    return $response
+            ->withHeader('Access-Control-Allow-Origin', '*')
+            ->withHeader('Access-Control-Allow-Headers', 'X-Requested-With, Content-Type, Accept, Origin, Authorization')
+            ->withHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, PATCH, OPTIONS');
+});
+
 
 $app->add(new Tuupola\Middleware\JwtAuthentication([
     "secure" => getenv('SECURE'),
@@ -27,7 +40,7 @@ $app->post('/token', function (Request $request, Response $response, array $args
 
 		$body = $request->getParsedBody();
 
-		$login = $body['login'];
+		$login = $body['username'];
 		$password = hash('sha256', $body['password']);
 
 		if (!empty($login) and !empty($password)) {
@@ -48,6 +61,7 @@ $app->post('/token', function (Request $request, Response $response, array $args
 		    $secret = getenv("JWT_SECRET");
 
 		    $token = JWT::encode($payload, $secret, "HS256");
+		    $data["user"] = ["name" => $login];
 		    $data["token"] = $token;
 		    $data["expires"] = $future->getTimeStamp();
 
@@ -83,6 +97,11 @@ $app->get('/getform/{form}', function (Request $request, Response $response, arr
   }
 
   return $response;
+});
+
+$app->map(['GET', 'POST', 'PUT', 'DELETE', 'PATCH'], '/{routes:.+}', function($req, $res) {
+    $handler = $this->notFoundHandler; // handle using the default Slim page not found handler
+    return $handler($req, $res);
 });
 
 $app->run();
