@@ -12,3 +12,13 @@ html, button, input, select, textarea,
 * {
 	outline: none;
 }
+
+.single-form-table {
+	min-width: 1200px;
+	width: 100%;
+	tr {
+		td:first-child, td:nth-child(2), td:last-child {
+			text-align: center;
+		}
+	}
+}

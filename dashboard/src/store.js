@@ -11,7 +11,8 @@ export default new Vuex.Store({
     status: '',
     token: localStorage.getItem('token') || '',
     user : {},
-    allForms: []
+    allForms: [],
+    currentForm: {}
   },
   mutations: {
 	  auth_request(state){
@@ -32,45 +33,62 @@ export default new Vuex.Store({
 	  fillForms(state, allForms){
 	    state.allForms = allForms
 	  },
+	  currentForm(state, form){
+	    state.currentForm = form
+	  },
 	},
   actions: {
 		login({commit}, user){
-	    return new Promise((resolve, reject) => {
 	      commit('auth_request')
 	      axios({url: `${apiUrl}/token`, data: user, method: 'POST' })
 	      .then(resp => {
 	        const token = resp.data.token
 	        const user = resp.data.user
 	        localStorage.setItem('token', token)
-	        axios.defaults.headers.common['Authorization'] = token
+	        axios.defaults.headers.common['Authorization'] = 'Bearer ' + token
 	        commit('auth_success', token, user)
-	        resolve(resp)
 	      })
 	      .catch(err => {
 	        commit('auth_error')
 	        localStorage.removeItem('token')
-	        reject(err)
 	      })
-	    })
 		},
 		logout({commit}){
-		  return new Promise((resolve, reject) => {
-		    commit('logout')
-		    localStorage.removeItem('token')
-		    delete axios.defaults.headers.common['Authorization']
-		    resolve()
-		  })
+				commit('logout')
+				delete axios.defaults.headers.common['Authorization']
+				localStorage.removeItem('token')
 		},
 		fillForms({commit}){
-			axios.get(`${apiUrl}/getlist`).then(resp => {
+			axios.get(`${apiUrl}/getlist`)
+			.then(resp => {
 				const allForms = resp.data ? resp.data : []
 				commit('fillForms', allForms)
+			})
+			.catch(err => {
+				if (err.response.status === 401) {
+					this.dispatch('logout')
+				}
+			})
+		},
+		fillCurrentForm({commit}, form_id){
+			axios.get(`${apiUrl}/getform/${form_id}`)
+			.then(resp => {
+				const form = resp.data ? resp.data : {}
+				commit('currentForm', form)
+			})
+			.catch(err => {
+				console.log(err.response)
+				if (err.response.status === 401) {
+					this.dispatch('logout')
+				}
 			})
 		}
   },
   getters : {
 	  isLoggedIn: state => !!state.token,
 	  authStatus: state => state.status,
-	  getAllFroms: state => state.allForms,
+	  getAllForms: state => state.allForms,
+	  getCurrentForm: state => state.currentForm,
+	  
 	}
 })

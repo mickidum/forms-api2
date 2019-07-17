@@ -12,27 +12,39 @@
 </template>
 
 <script>
+  
   export default {
     computed : {
-      isLoggedIn : function(){ return this.$store.getters.isLoggedIn}
+      isLoggedIn(){ 
+        return this.$store.getters.isLoggedIn
+      },
+      getTime() {
+        return Math.floor(Date.now() / 1000)
+      }
     },
     methods: {
-      logout: function () {
+      logout() {
         this.$store.dispatch('logout')
         .then(() => {
           this.$router.push('/login')
         })
+      },
+      refreshToken() {
+        let now = +this.getTime
+        let expires = +localStorage.getItem('expires') || now
+        console.log(expires)
+        console.log(now)
+        let refresh = expires - now;
+        console.log('Refresh :', refresh);
+        if (refresh > 0) {
+          let start = setInterval(() => {
+            console.log('ping')
+          }, refresh * 1000)
+        }
       }
     },
-    created: function () {
-	    this.$http.interceptors.response.use(undefined, function (err) {
-	      return new Promise(function (resolve, reject) {
-	        if (err.status === 401 && err.config && !err.config.__isRetryRequest) {
-	          this.$store.dispatch(logout)
-	        }
-	        throw err;
-	      });
-	    });
+    created() {
+      // this.refreshToken()
 	  }
   }
 </script>

@@ -4,6 +4,7 @@ import store from './store.js'
 import Home from './views/Home.vue'
 import About from './views/About.vue'
 import FormList from './views/FormList.vue'
+import Form from './views/Form.vue'
 import Login from './components/Login.vue'
 import Secure from './components/Secure.vue'
 
@@ -39,6 +40,14 @@ let router = new Router({
       path: '/form-list',
       name: 'formList',
       component: FormList,
+      meta: { 
+        requiresAuth: true
+      }
+    },
+    {
+      path: '/form/:form_id',
+      name: 'form',
+      component: Form,
       meta: { 
         requiresAuth: true
       }

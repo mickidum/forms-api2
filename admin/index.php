@@ -49,6 +49,7 @@ $app->post('/token', function (Request $request, Response $response, array $args
 
 				$now = new DateTime();
 		    $future = new DateTime("now +2 hours");
+		    // $future = new DateTime("now +10 seconds");
 		    $server = $request->getServerParams();
 
 		    $payload = [
@@ -63,6 +64,7 @@ $app->post('/token', function (Request $request, Response $response, array $args
 		    $token = JWT::encode($payload, $secret, "HS256");
 		    $data["user"] = ["name" => $login];
 		    $data["token"] = $token;
+		    // $data["auth"] = ["token" => $token, "expires" => $future->getTimeStamp()];
 		    $data["expires"] = $future->getTimeStamp();
 
 		  	$response = $response->withJson($data, 201);
@@ -74,8 +76,8 @@ $app->post('/token', function (Request $request, Response $response, array $args
   	return $response;
 });
 
-$app->get('/mic', function (Request $request, Response $response, array $args) {
-	return $response->withJson(['test' => 'ok'], 201);
+$app->get('/ping', function (Request $request, Response $response, array $args) {
+	return $response->withJson(['status' => 'pong'], 200);
 });
 
 $app->get('/getlist', function (Request $request, Response $response, array $args) {

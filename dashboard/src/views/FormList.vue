@@ -1,8 +1,13 @@
 <template>
 	<div class="list">
 		<h1>All Forms Here</h1>
-		<div class="list">
+		<div v-if="allForms" class="list">
 			{{allForms}}
+			<ol>
+				<li v-for="item in allForms" :key="item.form_id">
+					<router-link :to="{ name: 'form', params: { form_id: item.form_id }}">{{item.title}}</router-link>
+				</li>
+			</ol>
 		</div>
 	</div>
 </template>
@@ -12,13 +17,11 @@
 		name: 'FormList',
 		computed: {
 			allForms() {
-				return this.$store.getters.getAllFroms
+				return this.$store.getters.getAllForms 
 			}
 		},
 		mounted() {
-			if (!this.allForms.length) {
-				this.$store.dispatch('fillForms')
-			}
+			this.$store.dispatch('fillForms')
 		},
 		methods: {
 			
