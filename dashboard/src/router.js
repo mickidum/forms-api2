@@ -12,6 +12,7 @@ Vue.use(Router)
 
 let router = new Router({
   mode: 'history',
+  base: process.env.BASE_URL,
   routes: [
     {
       path: '/',
@@ -45,7 +46,7 @@ let router = new Router({
       }
     },
     {
-      path: '/form/:form_id',
+      path: '/:form_id',
       name: 'form',
       component: Form,
       meta: { 
@@ -57,11 +58,12 @@ let router = new Router({
 
 router.beforeEach((to, from, next) => {
   if(to.matched.some(record => record.meta.requiresAuth)) {
-    if (store.getters.isLoggedIn) {
-      next()
-      return
+    if (!store.getters.isLoggedIn) {
+      next('/login')
+    } else {
+      next() 
     }
-    next('/login') 
+    
   } else {
     next() 
   }

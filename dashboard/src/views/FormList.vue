@@ -1,11 +1,11 @@
 <template>
-	<div class="list">
+	<div v-if="allForms" class="list">
 		<h1>All Forms Here</h1>
-		<div v-if="allForms" class="list">
+		<div class="list">
 			{{allForms}}
 			<ol>
 				<li v-for="item in allForms" :key="item.form_id">
-					<router-link :to="{ name: 'form', params: { form_id: item.form_id }}">{{item.title}}</router-link>
+					<router-link :to="item.form_id">{{item.title}}</router-link>
 				</li>
 			</ol>
 		</div>

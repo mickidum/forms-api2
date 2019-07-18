@@ -49,8 +49,8 @@ $app->post('/token', function (Request $request, Response $response, array $args
 
 				$now = new DateTime();
 		    $future = new DateTime("now +2 hours");
-		    // $future = new DateTime("now +10 seconds");
-		    $server = $request->getServerParams();
+		    // $future = new DateTime("now +5 seconds");
+		    // $server = $request->getServerParams();
 
 		    $payload = [
 		        "iat" => $now->getTimeStamp(),

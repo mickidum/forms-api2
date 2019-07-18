@@ -1,10 +1,12 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import axios from 'axios'
+import {config} from './config'
+import router from './router'
 
 Vue.use(Vuex)
 
-const apiUrl = 'http://localhost/api-test/forms-api2/admin';
+const apiUrl = process.env.NODE_ENV === 'production' ? config.prodUrl : config.devUrl
 
 export default new Vuex.Store({
   state: {
@@ -12,11 +14,15 @@ export default new Vuex.Store({
     token: localStorage.getItem('token') || '',
     user : {},
     allForms: [],
-    currentForm: {}
+    currentForm: {},
+    loading: false,
   },
   mutations: {
 	  auth_request(state){
 	    state.status = 'loading'
+	  },
+	  loading(state){
+	    state.loading = !state.loading
 	  },
 	  auth_success(state, token, user){
 	    state.status = 'success'
@@ -28,7 +34,7 @@ export default new Vuex.Store({
 	  },
 	  logout(state){
 	    state.status = ''
-	    state.token = ''
+	    state.isLoggedIn = false
 	  },
 	  fillForms(state, allForms){
 	    state.allForms = allForms
@@ -58,28 +64,33 @@ export default new Vuex.Store({
 				delete axios.defaults.headers.common['Authorization']
 				localStorage.removeItem('token')
 		},
-		fillForms({commit}){
+		fillForms({commit, dispatch}){
 			axios.get(`${apiUrl}/getlist`)
 			.then(resp => {
 				const allForms = resp.data ? resp.data : []
 				commit('fillForms', allForms)
 			})
 			.catch(err => {
+				// console.log(err.response)
 				if (err.response.status === 401) {
-					this.dispatch('logout')
+					dispatch('logout').then(() => {
+	          router.push('/login')
+	        })
 				}
 			})
 		},
-		fillCurrentForm({commit}, form_id){
+		fillCurrentForm({commit, dispatch}, form_id){
 			axios.get(`${apiUrl}/getform/${form_id}`)
 			.then(resp => {
 				const form = resp.data ? resp.data : {}
 				commit('currentForm', form)
 			})
 			.catch(err => {
-				console.log(err.response)
+				// console.log(err.response)
 				if (err.response.status === 401) {
-					this.dispatch('logout')
+					dispatch('logout').then(() => {
+	          router.push('/login')
+	        })
 				}
 			})
 		}
@@ -89,6 +100,5 @@ export default new Vuex.Store({
 	  authStatus: state => state.status,
 	  getAllForms: state => state.allForms,
 	  getCurrentForm: state => state.currentForm,
-	  
 	}
 })

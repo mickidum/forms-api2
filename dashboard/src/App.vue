@@ -7,7 +7,12 @@
       <span v-if="isLoggedIn"> | <a @click="logout">Logout</a></span>
       <span v-else>  | <router-link to="/login">Login</router-link></span>
     </div>
-    <router-view/>
+    <transition
+      name="fade"
+      mode="out-in"
+    >
+    <router-view></router-view>
+    </transition>
   </div>
 </template>
 
@@ -44,7 +49,7 @@
       }
     },
     created() {
-      // this.refreshToken()
-	  }
+      // console.log(process)
+    }
   }
 </script>

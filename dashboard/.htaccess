@@ -1,0 +1,5 @@
+<FilesMatch "\.(vue|js|html|css)$">
+Order allow,deny
+Deny from all
+
+</FilesMatch>

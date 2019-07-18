@@ -16,6 +16,8 @@ html, button, input, select, textarea,
 .single-form-table {
 	min-width: 1200px;
 	width: 100%;
+	margin: auto;
+	overflow: hidden;
 	tr {
 		td:first-child, td:nth-child(2), td:last-child {
 			text-align: center;

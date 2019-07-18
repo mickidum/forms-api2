@@ -4,7 +4,7 @@
 # Header set Access-Control-Allow-Methods "GET,PUT,POST,DELETE"
 # Header set Access-Control-Allow-Headers "Content-Type, Authorization"
 
-<FilesMatch "\.(ini|psd|log|sh|csv|json|html|data|settings|env)$">
+<FilesMatch "\.(ini|psd|log|sh|csv|json|data|settings|env)$">
 Order allow,deny
 Deny from all
 </FilesMatch>
@@ -24,3 +24,12 @@ Deny from all
 		Header set Expires "Thu, 1 Jan 1970 00:00:00 GMT"
 	</IfModule>
 </FilesMatch>
+
+# Disable directory browsing 
+Options -Indexes
+
+# Hide the contents of directories
+IndexIgnore *
+
+# Hide files of type .png, .zip, .jpg, .gif and .doc from listing
+IndexIgnore *.png *.zip *.jpg *.gif *.doc *
