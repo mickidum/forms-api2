@@ -1,25 +1,24 @@
 <template>
 	<div v-if="form" class="single-form">
-		<!-- <pre>{{n}}</pre> -->
+		<!-- <pre>{{form}}</pre> -->
 		<!-- <pre v-if="form.settings">{{form.items}}</pre> -->
 		<h1>{{ form.form_name }}</h1>
 		<div class="scrollable">
-			<table v-if="form.settings" class="single-form-table pure-table-striped pure-table pure-table-bordered">
-				<thead>
+			{{checkedRows}}
+			<table class="pure-table single-form-table pure-table-bordered">
+				<thead v-if="itemsNames">
 					<tr>
-						<th class="text-center">N</th>
-						<th class="text-center" :key="index" v-for="(item, index) in form.settings.items_names">
-							{{ item }}
-						</th>
+						<th class="check"><input v-model="selectAll" @change="checkAll" type="checkbox" :value="items"></th>
+						<th>#</th>
+						<th v-for="item in itemsNames">{{item.title}}</th>
 					</tr>
 				</thead>
-				<tbody>
-					<form-item
-					 v-for="(item, index) in form.items" 
-					 :key="item.item_id" 
-					 :item="item" 
-					 :number="index + 1"
-					/>	
+				<tbody v-if="items">
+					<tr v-for="(item, index) in items">
+						<td class="check"><input ref="it" v-model="checkedRows" :value="item" type="checkbox"></td>
+						<td>{{index + 1}}</td>
+						<td v-for="i in item">{{i}}</td>
+					</tr>
 				</tbody>
 			</table>
 		</div>
@@ -27,14 +26,31 @@
 </template>
 
 <script>
-	import FormItem from '../components/FormItem'
+	import Vuetable from 'vuetable-2'
 	export default {
+		data() {
+			return {
+				checkedRows: [],
+				selectAll: false
+			}
+		},
 		components: {
-			FormItem
+			Vuetable
 		},
 		computed: {
 			form() {
 				return this.$store.getters.getCurrentForm
+			},
+			itemsNames() {
+				return this.form.settings.items_names
+			},
+			items() {
+				return this.form.items.reverse()
+			}
+		},
+		methods: {
+			checkAll() {
+				this.selectAll ? this.checkedRows = this.items : this.checkedRows = []
 			}
 		},
 		mounted() {

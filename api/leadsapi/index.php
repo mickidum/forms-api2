@@ -59,7 +59,11 @@ $app->post('/newlead', function (Request $request, Response $response, array $ar
 	$items = [];
 	$items_names = [];
 
-	$items_names[] = 'ID';
+	$items_names[] = [
+    'name' => 'item_id',
+    'title' => 'ID'
+  ];
+  
 	$items['item_id'] = uniqid();
 
 	$safe_post = array_map('test_input', $request->getParsedBody());
@@ -70,12 +74,19 @@ $app->post('/newlead', function (Request $request, Response $response, array $ar
 
 	foreach ($safe_post as $key => $value) {
     if ($key !== "form_name" and $key !== "form_name_id" and $key !== "g-recaptcha-response") {
-      $items_names[] = $key;
+      // $items_names[] = $key;
+      $items_names[] = [
+        'name' => $key,
+        'title' => $key
+      ];
       $items[$key] = $value;
     }
   }
 
-  $items_names[] = 'Date';
+  $items_names[] = [
+    'name' => 'date',
+    'title' => 'Date'
+  ];
 	$items['date'] = date("d-m-Y H:i");
 
 	// FORM ID

@@ -1,6 +1,8 @@
 <template>
-	<tr v-if="item">
-		<td>{{number}}</td>
+	<tr v-if="item" @click="selectRow(item)">
+		<td>
+			{{number}}
+		</td>
 		<td v-for="(i, index) in item" :key="index">{{ flatArray(i) }}</td>
 	</tr>
 </template>
@@ -17,6 +19,9 @@
 					return arr.join(', ')
 				}
 				return arr
+			},
+			selectRow(id) {
+				this.$emit('selectRow', id);
 			}
 		}
 	}

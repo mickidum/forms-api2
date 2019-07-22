@@ -1,0 +1,27 @@
+.single-form-table {
+	min-width: 1200px;
+	width: 100%;
+	margin: auto;
+	overflow: hidden;
+	tr {
+		td:first-child,th:first-child, td:nth-child(2),th:nth-child(2), td:last-child,th:last-child {
+			text-align: center;
+		}
+		td:nth-child(3), th:nth-child(3) {
+			display: none;
+		}
+		&:hover {
+			td {
+				background-color: lighten(#000, 90%) !important;
+			}
+		}
+	}
+	.check {
+		width: 15px;
+		input[type="checkbox"] {
+			width: 16px;
+	    height: 16px;
+	    cursor: pointer;
+		}
+	}
+}

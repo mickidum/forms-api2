@@ -14,7 +14,7 @@ export default new Vuex.Store({
     token: localStorage.getItem('token') || '',
     user : {},
     allForms: [],
-    currentForm: {},
+    currentForm: null,
     loading: false,
   },
   mutations: {
@@ -41,6 +41,9 @@ export default new Vuex.Store({
 	  },
 	  currentForm(state, form){
 	    state.currentForm = form
+	  },
+	  clearCurrentForm(state){
+	    state.currentForm = null
 	  },
 	},
   actions: {
@@ -80,6 +83,7 @@ export default new Vuex.Store({
 			})
 		},
 		fillCurrentForm({commit, dispatch}, form_id){
+			commit('clearCurrentForm')
 			axios.get(`${apiUrl}/getform/${form_id}`)
 			.then(resp => {
 				const form = resp.data ? resp.data : {}
