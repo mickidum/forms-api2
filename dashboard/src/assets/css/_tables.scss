@@ -25,3 +25,17 @@
 		}
 	}
 }
+
+.single-form {
+	header {
+		position: relative;
+		display: flex;
+		align-items: center;
+		h1, button {
+			line-height: 1;
+		}
+		button {
+			margin: 3px 10px 0;
+		}
+	}
+}

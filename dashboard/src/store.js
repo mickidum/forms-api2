@@ -42,6 +42,9 @@ export default new Vuex.Store({
 	  currentForm(state, form){
 	    state.currentForm = form
 	  },
+	  filteredCurrentForm(state, items) {
+			state.currentForm.items = items
+	  },
 	  clearCurrentForm(state){
 	    state.currentForm = null
 	  },
@@ -97,7 +100,10 @@ export default new Vuex.Store({
 	        })
 				}
 			})
-		}
+		},
+		removeCheckedItems({commit}, items){
+			commit('filteredCurrentForm', items)
+		},
   },
   getters : {
 	  isLoggedIn: state => !!state.token,

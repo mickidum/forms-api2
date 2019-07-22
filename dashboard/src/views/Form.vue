@@ -2,9 +2,13 @@
 	<div v-if="form" class="single-form">
 		<!-- <pre>{{form}}</pre> -->
 		<!-- <pre v-if="form.settings">{{form.items}}</pre> -->
-		<h1>{{ form.form_name }}</h1>
+		<header>
+			<h1>{{ form.form_name }}</h1>
+			<button v-if="checkedRows.length" class="pure-button button-error" @click="removeChecked">DELETE</button>
+		</header>
+		
 		<div class="scrollable">
-			{{checkedRows}}
+			<!-- {{checkedRows}} -->
 			<table class="pure-table single-form-table pure-table-bordered">
 				<thead v-if="itemsNames">
 					<tr>
@@ -15,7 +19,7 @@
 				</thead>
 				<tbody v-if="items">
 					<tr v-for="(item, index) in items">
-						<td class="check"><input ref="it" v-model="checkedRows" :value="item" type="checkbox"></td>
+						<td class="check"><input v-model="checkedRows" :value="item" type="checkbox"></td>
 						<td>{{index + 1}}</td>
 						<td v-for="i in item">{{i}}</td>
 					</tr>
@@ -26,16 +30,13 @@
 </template>
 
 <script>
-	import Vuetable from 'vuetable-2'
+	import _ from 'lodash';
 	export default {
 		data() {
 			return {
 				checkedRows: [],
 				selectAll: false
 			}
-		},
-		components: {
-			Vuetable
 		},
 		computed: {
 			form() {
@@ -45,12 +46,18 @@
 				return this.form.settings.items_names
 			},
 			items() {
-				return this.form.items.reverse()
+				return this.form.items
 			}
 		},
 		methods: {
 			checkAll() {
 				this.selectAll ? this.checkedRows = this.items : this.checkedRows = []
+			},
+			removeChecked() {
+				// confirm('Delete Checked Items?')
+				let items = _.difference(this.items, this.checkedRows);
+				this.$store.dispatch('removeCheckedItems', items)
+				this.checkedRows = []
 			}
 		},
 		mounted() {
