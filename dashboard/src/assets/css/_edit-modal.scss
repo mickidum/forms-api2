@@ -1,0 +1,63 @@
+.edit-modal {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+  min-height: 100vh;
+  z-index: 5;
+  background-color: rgba(0, 0, 0, 0.57);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  .inner {
+  	background-color: #fff;
+  	padding: 30px 20px 15px;
+  	position: relative;
+  	width: 100%;
+    max-width: 480px;
+    .close {
+    	position: absolute;
+	    right: 8px;
+	    top: 5px;
+	    font-size: 36px;
+	    line-height: 0.8;
+	    cursor: pointer;
+    }
+    .input-item {
+    	font-weight: bold;
+    	margin-bottom: 10px;
+    	input {
+    		font-weight: normal;
+    		width: 100%;
+    	}
+    	&:first-child, &:last-child {
+    		display: none;
+    	}
+    }
+    .input-item1 {
+    	font-weight: bold;
+    	margin-bottom: 10px;
+    	input {
+    		font-weight: normal;
+    		width: 100%;
+    	}
+    }
+    .is-array {
+    	position: relative;
+    	p {
+    		font-weight: bold;
+    		// background-color: gray;
+    		padding: 6px 5px;
+    		line-height: 1;
+    		// color: #fff;
+    		margin-bottom: 0;
+    	}
+    	input {
+    		width: 100%;
+    	}
+    }
+    &.inner-login {
+    	padding: 15px;
+    }
+  }
+}

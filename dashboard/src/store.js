@@ -34,7 +34,7 @@ export default new Vuex.Store({
 	  },
 	  logout(state){
 	    state.status = ''
-	    state.isLoggedIn = false
+	    state.token = ''
 	  },
 	  fillForms(state, allForms){
 	    state.allForms = allForms
@@ -59,10 +59,12 @@ export default new Vuex.Store({
 	        localStorage.setItem('token', token)
 	        axios.defaults.headers.common['Authorization'] = 'Bearer ' + token
 	        commit('auth_success', token, user)
+	        router.push('/')
 	      })
 	      .catch(err => {
 	        commit('auth_error')
 	        localStorage.removeItem('token')
+	        
 	      })
 		},
 		logout({commit}){
@@ -101,7 +103,7 @@ export default new Vuex.Store({
 				}
 			})
 		},
-		removeCheckedItems({commit}, items){
+		removeCheckedItems({commit, getters}, items){
 			commit('filteredCurrentForm', items)
 		},
   },

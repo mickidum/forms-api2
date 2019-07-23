@@ -14,23 +14,15 @@ let router = new Router({
   mode: 'history',
   base: process.env.BASE_URL,
   routes: [
-    {
-      path: '/',
-      name: 'home',
-      component: Home
-    },
+    // {
+    //   path: '/',
+    //   name: 'home',
+    //   component: Home
+    // },
     {
       path: '/login',
       name: 'login',
       component: Login
-    },
-    {
-      path: '/secure',
-      name: 'secure',
-      component: Secure,
-      meta: { 
-        requiresAuth: true
-      }
     },
     {
       path: '/about',
@@ -38,7 +30,7 @@ let router = new Router({
       component: About
     },
     {
-      path: '/form-list',
+      path: '/',
       name: 'formList',
       component: FormList,
       meta: { 

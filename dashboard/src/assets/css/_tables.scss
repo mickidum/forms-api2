@@ -4,11 +4,19 @@
 	margin: auto;
 	overflow: hidden;
 	tr {
-		td:first-child,th:first-child, td:nth-child(2),th:nth-child(2), td:last-child,th:last-child {
+		td:first-child,th:first-child, 
+		td:nth-child(2),th:nth-child(2), 
+		td:last-child,th:last-child {
 			text-align: center;
 		}
 		td:nth-child(3), th:nth-child(3) {
 			display: none;
+		}
+		td:nth-child(2),th:nth-child(2) {
+			width: 50px;
+		}
+		td:last-child,th:last-child {
+			width: 160px;
 		}
 		&:hover {
 			td {
@@ -37,5 +45,23 @@
 		button {
 			margin: 3px 10px 0;
 		}
+	}
+	.edit {
+		min-width: 56px;
+		display: inline-block;
+		// display: flex;
+  //   align-items: center;
+  //   justify-content: center;
+    button {
+    	display: inline-block;
+    	padding: 4px 8px;
+    	line-height: 1;
+    	vertical-align: middle;
+    }
+    span {
+    	display: inline-block;
+    	vertical-align: middle;
+    	margin-top: -3px;
+    }
 	}
 }

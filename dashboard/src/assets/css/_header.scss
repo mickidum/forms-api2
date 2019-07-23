@@ -1,0 +1,21 @@
+.single-form-header {
+	position: relative;
+	padding: 0 10px;
+}
+
+.main-header {
+	background-color: #e0e0e0;
+  color: black;
+  padding: 10px;
+  a, .logout {
+  	color: #000;
+  	text-decoration: none;
+  	cursor: pointer;
+  	&:hover {
+  		color: blue
+  	}
+  }
+  .logout {
+  	float: right;
+  }
+}

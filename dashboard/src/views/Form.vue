@@ -2,7 +2,7 @@
 	<div v-if="form" class="single-form">
 		<!-- <pre>{{form}}</pre> -->
 		<!-- <pre v-if="form.settings">{{form.items}}</pre> -->
-		<header>
+		<header class="single-form-header">
 			<h1>{{ form.form_name }}</h1>
 			<button v-if="checkedRows.length" class="pure-button button-error" @click="removeChecked">DELETE</button>
 		</header>
@@ -20,11 +20,40 @@
 				<tbody v-if="items">
 					<tr v-for="(item, index) in items">
 						<td class="check"><input v-model="checkedRows" :value="item" type="checkbox"></td>
-						<td>{{index + 1}}</td>
+						<td>
+							<div class="edit">
+								<span>{{index + 1}} &nbsp;</span>
+								<button 
+								 class="pure-button button-primary button-xsmall button-secondary" 
+								 @click="editItem(item)">
+								 edit
+								</button>
+							</div>
+							</td>
 						<td v-for="i in item">{{i}}</td>
 					</tr>
 				</tbody>
 			</table>
+		</div>
+		<div v-if="editableItem" class="edit-modal">
+			<div class="inner">
+				<span class="close" @click="closeModal">&times;</span>
+				<form @submit.prevent="saveItem" class="pure-form pure-form-stacked">
+					<template v-for="(item, key) in editableItem">
+						<label class="input-item" v-if="!ifArray(item)">
+	      			{{key}}
+							<input type="text" v-model="editableItem[key]">
+						</label>
+						<div class="is-array input-item" v-else>
+				      <p>{{key}}</p>
+							<input v-for="(i, index) in item" type="text" v-model="editableItem[key][index]" :placeholder="'name of ' + key">
+						</div>
+					</template>
+					<p>
+						<button type="submit" class="pure-button pure-button-primary">Save Item</button>
+					</p>
+				</form>
+			</div>
 		</div>
 	</div>
 </template>
@@ -35,7 +64,9 @@
 		data() {
 			return {
 				checkedRows: [],
-				selectAll: false
+				selectAll: false,
+				editableItem: null,
+				test: 'sdsdsdsd'
 			}
 		},
 		computed: {
@@ -58,6 +89,29 @@
 				let items = _.difference(this.items, this.checkedRows);
 				this.$store.dispatch('removeCheckedItems', items)
 				this.checkedRows = []
+				this.selectAll = false
+			},
+			editItem(item) {
+				this.editableItem = item
+				// console.log(this.editableItem)
+			},
+			saveItem(e) {
+				console.log(this.editableItem)
+			},
+			flatArray(arr) {
+				if(Array.isArray(arr)) {
+					return arr.join(', ')
+				}
+				return arr
+			},
+			ifArray(arr) {
+				if(Array.isArray(arr)) {
+					return true
+				}
+				return false
+			},
+			closeModal() {
+				this.editableItem = null
 			}
 		},
 		mounted() {
