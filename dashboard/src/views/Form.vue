@@ -2,7 +2,7 @@
 	<div v-if="form" class="single-form">
 		<!-- <pre>{{form}}</pre> -->
 		<!-- <pre v-if="form.settings">{{form.items}}</pre> -->
-		<span class="settings" @click="removeChecked">Settings</span>
+		<span class="settings" @click="editSettings">Settings</span>
 		<header class="single-form-header">
 			<h1>{{ form.form_name }}</h1>
 			<button v-if="checkedRows.length" class="pure-button button-error" @click="removeChecked">Delete Row</button>
@@ -79,7 +79,10 @@
 				this.selectAll ? this.checkedRows = this.items : this.checkedRows = []
 			},
 			removeChecked() {
-				// confirm('Delete Checked Items?')
+				let del = confirm('Delete Checked Rows?')
+				if (!del) {
+					return
+				}
 				let items = _.difference(this.items, this.checkedRows);
 				this.updateForm(items) 
 				this.checkedRows = []
@@ -88,7 +91,15 @@
 			editItem(item) {
 				this.editableItem = item
 			},
+			editSettings() {
+
+			},
 			saveItem(item) {
+				let upd = confirm('Save Changes?')
+				if (!upd) {
+					this.closeModal()
+					return
+				}
 				const index = _.findIndex(this.items, { 'item_id':  item.item_id})
 				const items = this.items
 				items.splice(index, 1, item)
@@ -108,6 +119,7 @@
 			},
 			closeModal() {
 				this.editableItem = null
+				this.$store.dispatch('fillCurrentForm', this.$route.params.form_id)
 			}
 		},
 		mounted() {
