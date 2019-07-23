@@ -64,7 +64,7 @@ export default new Vuex.Store({
 	      .catch(err => {
 	        commit('auth_error')
 	        localStorage.removeItem('token')
-	        
+
 	      })
 		},
 		logout({commit}){
@@ -106,6 +106,20 @@ export default new Vuex.Store({
 		removeCheckedItems({commit, getters}, items){
 			commit('filteredCurrentForm', items)
 		},
+		updateCurrentForm({commit, dispatch}, form) {
+			axios.put(`${apiUrl}/updateform/${form.form_id}`, form)
+			.then(resp => {
+				const newForm = resp.data ? resp.data : {}
+				commit('currentForm', newForm)
+			})
+			.catch(err => {
+				if (err.response.status === 401) {
+					dispatch('logout').then(() => {
+	          router.push('/login')
+	        })
+				}
+			})
+		}
   },
   getters : {
 	  isLoggedIn: state => !!state.token,

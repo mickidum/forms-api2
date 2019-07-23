@@ -2,9 +2,10 @@
 	<div v-if="form" class="single-form">
 		<!-- <pre>{{form}}</pre> -->
 		<!-- <pre v-if="form.settings">{{form.items}}</pre> -->
+		<span class="settings" @click="removeChecked">Settings</span>
 		<header class="single-form-header">
 			<h1>{{ form.form_name }}</h1>
-			<button v-if="checkedRows.length" class="pure-button button-error" @click="removeChecked">DELETE</button>
+			<button v-if="checkedRows.length" class="pure-button button-error" @click="removeChecked">Delete Row</button>
 		</header>
 		
 		<div class="scrollable">
@@ -36,39 +37,27 @@
 			</table>
 		</div>
 		<div v-if="editableItem" class="edit-modal">
-			<div class="inner">
-				<span class="close" @click="closeModal">&times;</span>
-				<form @submit.prevent="saveItem" class="pure-form pure-form-stacked">
-					<div>
-						<template v-for="(item, key) in editableItem">
-							<label class="input-item" v-if="!ifArray(item)">
-							      			{{key}}
-								<input type="text" v-model="editableItem[key]">
-							</label>
-							<div class="is-array input-item" v-else>
-										      <p>{{key}}</p>
-								<input v-for="(i, index) in item" type="text" v-model="editableItem[key][index]" :placeholder="'name of ' + key">
-							</div>
-						</template>
-					</div>
-					<p>
-						<button type="submit" class="pure-button pure-button-primary">Save Item</button>
-					</p>
-				</form>
-			</div>
+			<modal-edit
+			:editableItem="editableItem"
+			@closeModal="closeModal"
+			@saveItem="saveItem(editableItem)"
+			></modal-edit>
 		</div>
 	</div>
 </template>
 
 <script>
 	import _ from 'lodash';
+	import ModalEdit from '../components/ModalEdit';
 	export default {
+		components: {
+			ModalEdit
+		},
 		data() {
 			return {
 				checkedRows: [],
 				selectAll: false,
 				editableItem: null,
-				test: 'sdsdsdsd'
 			}
 		},
 		computed: {
@@ -92,16 +81,19 @@
 			removeChecked() {
 				// confirm('Delete Checked Items?')
 				let items = _.difference(this.items, this.checkedRows);
-				this.$store.dispatch('removeCheckedItems', items)
+				this.updateForm(items) 
 				this.checkedRows = []
 				this.selectAll = false
 			},
 			editItem(item) {
 				this.editableItem = item
-				// console.log(this.editableItem)
 			},
-			saveItem() {
-				console.log(this.editableItem)
+			saveItem(item) {
+				const index = _.findIndex(this.items, { 'item_id':  item.item_id})
+				const items = this.items
+				items.splice(index, 1, item)
+				this.updateForm(items)
+				this.closeModal()
 			},
 			flatArray(arr) {
 				if(Array.isArray(arr)) {
@@ -109,11 +101,10 @@
 				}
 				return arr
 			},
-			ifArray(arr) {
-				if(Array.isArray(arr)) {
-					return true
-				}
-				return false
+			updateForm(items) {
+				const form = this.form
+				form.items = items
+				this.$store.dispatch('updateCurrentForm', form)
 			},
 			closeModal() {
 				this.editableItem = null

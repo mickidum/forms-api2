@@ -80,6 +80,27 @@ $app->get('/ping', function (Request $request, Response $response, array $args) 
 	return $response->withJson(['status' => 'pong'], 200);
 });
 
+$app->put('/updateform/{form}', function (Request $request, Response $response, array $args) {
+	$body = $request->getParsedBody();
+	$name = $args['form'];
+
+	if (file_exists('../api/data/form_reg_' . $name . '.json')) {
+    $json_file = fopen('../api/data/form_reg_' . $name . '.json', 'w');
+    $json_encode_file = json_encode($body, JSON_UNESCAPED_UNICODE);
+    // var_dump($json_encode_file);
+    fwrite($json_file, $json_encode_file);
+    fclose($json_file);
+		$response = $response->withJson($body, 201, JSON_UNESCAPED_UNICODE);
+  } else {
+  	$response = $response->withJson([
+  		'status' => 'error',
+  		'message' => 'form not found'
+  	], 404);
+  }
+	
+	return $response;
+});
+
 $app->get('/getlist', function (Request $request, Response $response, array $args) {
 	if (file_exists('../api/settings/form-list.json')) {
 		$data = file_get_contents('../api/settings/form-list.json');
