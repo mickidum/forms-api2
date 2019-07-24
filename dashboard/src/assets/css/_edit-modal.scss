@@ -26,10 +26,13 @@
     .input-item {
     	font-weight: bold;
     	margin-bottom: 10px;
-    	input {
+    	input, textarea {
     		font-weight: normal;
     		width: 100%;
     	}
+      textarea {
+        min-height: 100px;
+      }
     	&:first-child, &:last-child {
     		display: none;
     	}
@@ -58,6 +61,29 @@
     }
     &.inner-login {
     	padding: 15px;
+    }
+      .delete-field {
+      position: relative;
+      margin-bottom: 10px;
+      input {
+        max-width: 89%;
+      }
+      span {
+        display: inline-block;
+        font-size: 30px;
+        line-height: 22px;
+        width: 30px;
+        height: 30px;
+        border: solid 1px red;
+        border-radius: 50%;
+        text-align: center;
+        cursor: pointer;
+        color: white;
+        background-color: red;
+        position: absolute;
+        right: 0;
+        top: 4px;
+      }
     }
   }
 }

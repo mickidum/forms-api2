@@ -1,12 +1,9 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import store from './store.js'
-import Home from './views/Home.vue'
-import About from './views/About.vue'
-import FormList from './views/FormList.vue'
-import Form from './views/Form.vue'
-import Login from './components/Login.vue'
-import Secure from './components/Secure.vue'
+import store from './store'
+import FormList from './views/FormList'
+import Form from './views/Form'
+import Login from './components/Login'
 
 Vue.use(Router)
 
@@ -14,21 +11,6 @@ let router = new Router({
   mode: 'history',
   base: process.env.BASE_URL,
   routes: [
-    // {
-    //   path: '/',
-    //   name: 'home',
-    //   component: Home
-    // },
-    {
-      path: '/login',
-      name: 'login',
-      component: Login
-    },
-    {
-      path: '/about',
-      name: 'about',
-      component: About
-    },
     {
       path: '/',
       name: 'formList',
@@ -38,13 +20,19 @@ let router = new Router({
       }
     },
     {
+      path: '/login',
+      name: 'login',
+      component: Login
+    },
+    {
       path: '/:form_id',
       name: 'form',
       component: Form,
       meta: { 
         requiresAuth: true
       }
-    }
+    },
+    
   ]
 })
 

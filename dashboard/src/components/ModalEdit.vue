@@ -9,8 +9,18 @@
 						<input type="text" v-model="editableItem[key]">
 					</label>
 					<div class="is-array input-item" v-else>
-								      <p>{{key}}</p>
-						<input v-for="(i, index) in item" type="text" v-model="editableItem[key][index]" :placeholder="'name of ' + key">
+			      <p>
+			      	{{key}} 
+			      	<span 
+							 class="pure-button button-xsmall button-secondary" 
+							 @click="addField(key)">
+							 add field
+							</span>
+				    </p>
+						<div class="delete-field" v-for="(i, index) in item">
+							<input type="text" v-model="editableItem[key][index]" :placeholder="'name of ' + key">
+							<span @click="delField(index, key)">-</span>
+						</div>
 					</div>
 				</template>
 			</div>
@@ -40,6 +50,22 @@
 				}
 				return false
 			},
+			addField(key) {
+				this.editableItem[key].unshift('')
+			},
+			delField(index, key) {
+				let upd = confirm('Delete this field?')
+				if (!upd) {
+					return
+				}
+				this.editableItem[key] = this.editableItem[key].filter((item, i) => {
+					return i !== index
+				})
+			}
 		}
 	}
 </script>
+
+<style lang="scss" scoped>
+
+</style>

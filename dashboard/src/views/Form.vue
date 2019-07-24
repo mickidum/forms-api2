@@ -30,8 +30,10 @@
 								 edit
 								</button>
 							</div>
-							</td>
-						<td v-for="i in item">{{i}}</td>
+						</td>
+						<td v-for="i in item">
+							{{ !ifArray(i) ? i : i.join(', ') }}
+						</td>
 					</tr>
 				</tbody>
 			</table>
@@ -47,8 +49,8 @@
 </template>
 
 <script>
-	import _ from 'lodash';
-	import ModalEdit from '../components/ModalEdit';
+	import _ from 'lodash'
+	import ModalEdit from '../components/ModalEdit'
 	export default {
 		components: {
 			ModalEdit
@@ -72,9 +74,16 @@
 			},
 			settings() {
 				return this.form.settings
-			}
+			},
+			
 		},
 		methods: {
+			ifArray(arr) {
+				if(Array.isArray(arr)) {
+					return true
+				}
+				return false
+			},
 			checkAll() {
 				this.selectAll ? this.checkedRows = this.items : this.checkedRows = []
 			},
@@ -83,13 +92,13 @@
 				if (!del) {
 					return
 				}
-				let items = _.difference(this.items, this.checkedRows);
+				let items = _.difference(this.items, this.checkedRows)
 				this.updateForm(items) 
 				this.checkedRows = []
 				this.selectAll = false
 			},
 			editItem(item) {
-				this.editableItem = item
+				this.editableItem = Object.assign({}, item)
 			},
 			editSettings() {
 
@@ -119,7 +128,7 @@
 			},
 			closeModal() {
 				this.editableItem = null
-				this.$store.dispatch('fillCurrentForm', this.$route.params.form_id)
+				// this.$store.dispatch('fillCurrentForm', this.$route.params.form_id)
 			}
 		},
 		mounted() {
@@ -127,7 +136,3 @@
 		}
 	}
 </script>
-
-<style lang="scss">
-	
-</style>
