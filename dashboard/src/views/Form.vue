@@ -106,7 +106,7 @@
 			saveItem(item) {
 				let upd = confirm('Save Changes?')
 				if (!upd) {
-					this.closeModal()
+					// this.closeModal()
 					return
 				}
 				const index = _.findIndex(this.items, { 'item_id':  item.item_id})

@@ -41,8 +41,22 @@
 				this.$emit('closeModal');
 			},
 			saveItem(item) {
-				// console.log(this.editableItem)
+				this.clearEmptyArraysFields(this.editableItem)
 				this.$emit('saveItem', item);
+			},
+			clearEmptyArraysFields(obj) {
+				let arrays = Object.keys(obj).filter(key => {
+					if (this.ifArray(obj[key])) {
+						return key
+					}
+				})
+				if (arrays.length) {
+					arrays.forEach(key => {
+					  this.editableItem[key] = this.editableItem[key].filter(item => {
+					  	return item !== ''
+					  })
+					});
+				}
 			},
 			ifArray(arr) {
 				if(Array.isArray(arr)) {
@@ -50,14 +64,23 @@
 				}
 				return false
 			},
+			findEmptyFields(arr) {
+				let emptyField = arr.filter(item => {
+					return item === ''
+				})
+				if (emptyField.length) {
+					return true
+				}
+				return false
+			},
 			addField(key) {
+				this.editableItem[key] = Object.assign([], this.editableItem[key])
+				if (this.findEmptyFields(this.editableItem[key])) {
+					return
+				}
 				this.editableItem[key].unshift('')
 			},
 			delField(index, key) {
-				let upd = confirm('Delete this field?')
-				if (!upd) {
-					return
-				}
 				this.editableItem[key] = this.editableItem[key].filter((item, i) => {
 					return i !== index
 				})
@@ -65,7 +88,3 @@
 		}
 	}
 </script>
-
-<style lang="scss" scoped>
-
-</style>
