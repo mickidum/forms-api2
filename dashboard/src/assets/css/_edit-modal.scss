@@ -65,6 +65,9 @@
       .delete-field {
       position: relative;
       margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
       input {
         max-width: 89%;
       }
@@ -80,9 +83,9 @@
         cursor: pointer;
         color: white;
         background-color: red;
-        position: absolute;
-        right: 0;
-        top: 4px;
+        // position: absolute;
+        // right: 0;
+        // top: 4px;
       }
     }
   }

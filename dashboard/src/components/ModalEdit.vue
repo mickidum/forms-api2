@@ -53,6 +53,7 @@
 				if (arrays.length) {
 					arrays.forEach(key => {
 					  this.editableItem[key] = this.editableItem[key].filter(item => {
+							item = item.trim()
 					  	return item !== ''
 					  })
 					});

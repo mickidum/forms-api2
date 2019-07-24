@@ -3,6 +3,9 @@
 	width: 100%;
 	margin: auto;
 	overflow: hidden;
+	thead th{
+		text-align: start;
+	}
 	tr {
 		td:first-child,th:first-child, 
 		td:nth-child(2),th:nth-child(2), 
@@ -35,12 +38,14 @@
 }
 
 .single-form {
+	position: relative;
 	header {
 		position: relative;
 		display: flex;
 		align-items: center;
 		h1 {
 			max-width: 70%;
+			margin-top: 0;
 		}
 		h1, button {
 			line-height: 1;

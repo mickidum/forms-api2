@@ -1,15 +1,12 @@
 <template>
 	<div v-if="form" class="single-form">
-		<!-- <pre>{{form}}</pre> -->
-		<!-- <pre v-if="form.settings">{{form.items}}</pre> -->
-		<span class="settings" @click="editSettings">Settings</span>
+		<span v-if="settings" class="settings" @click="editSettings(settings)">Settings</span>
 		<header class="single-form-header">
 			<h1>{{ form.form_name }}</h1>
 			<button v-if="checkedRows.length" class="pure-button button-error" @click="removeChecked">Delete Row</button>
 		</header>
 		
 		<div class="scrollable">
-			<!-- {{checkedRows}} -->
 			<table class="pure-table single-form-table pure-table-bordered">
 				<thead v-if="itemsNames">
 					<tr>
@@ -45,21 +42,31 @@
 			@saveItem="saveItem(editableItem)"
 			></modal-edit>
 		</div>
+		<div v-if="settingsItem" class="edit-modal">
+			<modal-settings
+			:settingsItem="settingsItem"
+			@closeModal="closeModal"
+			@saveItem="saveItem(settingsItem)"
+			></modal-settings>
+		</div>
 	</div>
 </template>
 
 <script>
 	import _ from 'lodash'
 	import ModalEdit from '../components/ModalEdit'
+	import ModalSettings from '../components/ModalSettings'
 	export default {
 		components: {
-			ModalEdit
+			ModalEdit,
+			ModalSettings
 		},
 		data() {
 			return {
 				checkedRows: [],
 				selectAll: false,
 				editableItem: null,
+				settingsItem: null,
 			}
 		},
 		computed: {
@@ -100,8 +107,8 @@
 			editItem(item) {
 				this.editableItem = Object.assign({}, item)
 			},
-			editSettings() {
-
+			editSettings(item) {
+				this.settingsItem = Object.assign({}, item)
 			},
 			saveItem(item) {
 				let upd = confirm('Save Changes?')
@@ -128,7 +135,7 @@
 			},
 			closeModal() {
 				this.editableItem = null
-				// this.$store.dispatch('fillCurrentForm', this.$route.params.form_id)
+				this.settingsItem = null
 			}
 		},
 		mounted() {
