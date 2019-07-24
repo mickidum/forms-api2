@@ -43,15 +43,18 @@
 		position: relative;
 		display: flex;
 		align-items: center;
+		padding: 0 10px;
+
 		h1 {
 			max-width: 70%;
-			margin-top: 0;
+			margin: 0;
+			margin: 0 0 10px;
 		}
 		h1, button {
 			line-height: 1;
 		}
 		button {
-			margin: 3px 10px 0;
+			margin: -3px 10px 3px;
 		}
 	}
 	.edit {

@@ -15,7 +15,8 @@
 }
 
 .button-error {
-  background: rgb(202, 60, 60); /* this is a maroon */
+  // background: rgb(202, 60, 60); 
+  background: red;
 }
 
 .button-warning {
@@ -53,4 +54,11 @@
   &:hover {
     color: blueviolet;
   }
+}
+
+.button-delete {
+  color: red;
+}
+.button-csv {
+  color: green;
 }

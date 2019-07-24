@@ -1,9 +1,13 @@
 <template>
 	<div v-if="form" class="single-form">
-		<span v-if="settings" class="settings" @click="editSettings(settings)">Settings</span>
+		<div class="form-menu">
+			<span v-if="settings" class="settings" @click="editSettings(settings)">Settings</span>
+			<span class="settings button-csv">Export csv</span>
+			<span class="settings button-delete">Delete form</span>
+		</div>
 		<header class="single-form-header">
 			<h1>{{ form.form_name }}</h1>
-			<button v-if="checkedRows.length" class="pure-button button-error" @click="removeChecked">Delete Row</button>
+			<button v-if="checkedRows.length" class="button-xsmall pure-button button-error" @click="removeChecked">Delete Row</button>
 		</header>
 		
 		<div class="scrollable">
