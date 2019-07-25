@@ -3,8 +3,16 @@
 		<div class="single-form">
 			<div class="form-menu">
 				<span v-if="settings" @click="editSettings(settings)" class="settings">Settings</span>
-				<span class="settings button-csv">Export csv</span>
-				<span @click="deleteForm" class="settings button-delete">Delete form</span>
+				<!-- <span class="settings button-csv">Export csv</span> -->
+				<downloadexcel
+		      class = "settings button-csv"
+		      :data = "items"
+		      type  = "csv"
+		      :name="form.form_id + '_csv-file.csv'"
+		      >
+		      Export csv
+		    </downloadexcel>
+		    <span @click="deleteForm" class="settings button-delete">Delete form</span>
 			</div>
 			<header class="single-form-header">
 				<h1>{{ form.form_name }}</h1>
@@ -57,7 +65,7 @@
 			@saveItem="saveItem(settingsItem)"
 			></modal-settings>
 		</div>
-		
+
 	</div>
 </template>
 
@@ -65,10 +73,12 @@
 	import _ from 'lodash'
 	import ModalEdit from '../components/ModalEdit'
 	import ModalSettings from '../components/ModalSettings'
+	import downloadexcel from '../components/JsonTocsv'
 	export default {
 		components: {
 			ModalEdit,
-			ModalSettings
+			ModalSettings,
+			downloadexcel
 		},
 		data() {
 			return {
@@ -95,6 +105,12 @@
 			
 		},
 		methods: {
+			startDownload(){
+	        alert('show loading');
+	    },
+	    finishDownload(){
+	        alert('hide loading');
+	    },
 			ifArray(arr) {
 				if(Array.isArray(arr)) {
 					return true
