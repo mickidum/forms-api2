@@ -6,6 +6,9 @@
 	background-color: #e0e0e0;
   color: black;
   padding: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
   a, .logout {
   	color: #000;
   	text-decoration: none;
@@ -13,8 +16,5 @@
   	&:hover {
   		color: blue
   	}
-  }
-  .logout {
-  	float: right;
   }
 }
