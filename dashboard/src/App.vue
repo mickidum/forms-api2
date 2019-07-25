@@ -2,6 +2,7 @@
   <div id="app">
     <header class="main-header" id="nav">
       <router-link to="/">Home</router-link>
+      <strong style="color: rgba(158, 158, 158, 0.18);">MICRO CRM</strong>
       <span class="logout">
         <span v-if="isLoggedIn" @click="logout">Logout</span>
         <router-link v-if="!isLoggedIn" to="/login">Login</router-link>
