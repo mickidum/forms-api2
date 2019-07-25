@@ -59,10 +59,10 @@ $app->post('/newlead', function (Request $request, Response $response, array $ar
 	$items = [];
 	$items_names = [];
 
-	$items_names[] = [
-    'name' => 'item_id',
-    'title' => 'ID'
-  ];
+	// $items_names[] = [
+ //    'name' => 'item_id',
+ //    'title' => 'ID'
+ //  ];
   
 	$items['item_id'] = uniqid();
 

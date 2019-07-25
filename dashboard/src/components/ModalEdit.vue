@@ -25,7 +25,8 @@
 				</template>
 			</div>
 			<p>
-				<button type="submit" class="pure-button pure-button-primary">Save Item</button>
+				<button type="submit" class="pure-button pure-button-primary">Save Item</button>&nbsp;
+				<button @click.prevent="closeModal" class="pure-button button-secondary pure-button-primary">Cancel</button>
 			</p>
 		</form>
 	</div>

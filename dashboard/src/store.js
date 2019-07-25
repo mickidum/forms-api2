@@ -48,6 +48,14 @@ export default new Vuex.Store({
 	  clearCurrentForm(state){
 	    state.currentForm = null
 	  },
+	  clearAllForms(state){
+	    state.allForms = []
+	  },
+	  deleteForm(state, form_id){
+			state.allForms = state.allForms.filter(form => {
+				return form.form_id !== form_id
+			})
+	  },
 	},
   actions: {
 		login({commit}, user){
@@ -111,6 +119,20 @@ export default new Vuex.Store({
 			.then(resp => {
 				const newForm = resp.data ? resp.data : {}
 				commit('currentForm', newForm)
+			})
+			.catch(err => {
+				if (err.response.status === 401) {
+					dispatch('logout').then(() => {
+	          router.push('/login')
+	        })
+				}
+			})
+		},
+		deleteForm({commit, dispatch}, form_id) {
+			commit('deleteForm', form_id)
+			axios.delete(`${apiUrl}/deleteform/${form_id}`)
+			.then(resp => {
+				commit('deleteForm', form_id)
 			})
 			.catch(err => {
 				if (err.response.status === 401) {

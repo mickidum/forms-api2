@@ -87,10 +87,41 @@ $app->put('/updateform/{form}', function (Request $request, Response $response, 
 	if (file_exists('../api/data/form_reg_' . $name . '.json')) {
     $json_file = fopen('../api/data/form_reg_' . $name . '.json', 'w');
     $json_encode_file = json_encode($body, JSON_UNESCAPED_UNICODE);
-    // var_dump($json_encode_file);
     fwrite($json_file, $json_encode_file);
     fclose($json_file);
 		$response = $response->withJson($body, 201, JSON_UNESCAPED_UNICODE);
+  } else {
+  	$response = $response->withJson([
+  		'status' => 'error',
+  		'message' => 'form not found'
+  	], 404);
+  }
+	
+	return $response;
+});
+
+$app->delete('/deleteform/{form}', function (Request $request, Response $response, array $args) {
+	
+	$name = $args['form'];
+	if (file_exists('../api/data/form_reg_' . $name . '.json')) {
+    unlink('../api/data/form_reg_' . $name . '.json');
+		
+  	if (file_exists('../api/settings/form-list.json')) {
+  		$data = file_get_contents('../api/settings/form-list.json');
+			$data = json_decode($data, true);
+			$index = array_search($name, $data);
+			array_splice($data, $index, 1);
+			$json_file = fopen('../api/settings/form-list.json', 'w');
+			$json_encode_file = json_encode($data, JSON_UNESCAPED_UNICODE);
+			fwrite($json_file, $json_encode_file);
+    	fclose($json_file);
+	  }
+
+	  $response = $response->withJson([
+  		'status' => 'success',
+  		'message' => 'form has been deleted'
+  	], 204);
+
   } else {
   	$response = $response->withJson([
   		'status' => 'error',

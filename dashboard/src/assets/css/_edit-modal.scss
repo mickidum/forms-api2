@@ -33,7 +33,8 @@
       textarea {
         min-height: 100px;
       }
-    	&:first-child, &:last-child {
+    	&:first-child, 
+      &:last-child {
     		display: none;
     	}
     }
