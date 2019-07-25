@@ -85,7 +85,7 @@
 				checkedRows: [],
 				selectAll: false,
 				editableItem: null,
-				editableIndex: null,
+				// editableIndex: null,
 				settingsItem: null,
 			}
 		},
@@ -105,12 +105,6 @@
 			
 		},
 		methods: {
-			startDownload(){
-	        alert('show loading');
-	    },
-	    finishDownload(){
-	        alert('hide loading');
-	    },
 			ifArray(arr) {
 				if(Array.isArray(arr)) {
 					return true
@@ -140,16 +134,16 @@
 			},
 			editItem(item, index) {
 				this.editableItem = Object.assign({}, item)
-				this.editableIndex = index
+				// this.editableIndex = index
 			},
 			editSettings(item) {
 				this.settingsItem = Object.assign({}, item)
 			},
 			saveItem(item) {
-				// let upd = confirm('Save Changes?')
-				// if (!upd) {
-				// 	return
-				// }
+				let upd = confirm('Save Changes?')
+				if (!upd) {
+					return
+				}
 				const index = _.findIndex(this.items, { 'item_id':  item.item_id})
 				// const index = _.findIndex(this.items, item)
 				// const index = this.editableIndex

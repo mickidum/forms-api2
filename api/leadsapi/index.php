@@ -101,7 +101,8 @@ $app->post('/newlead', function (Request $request, Response $response, array $ar
     'form_id' => $form_name_id,
     'title' => $form_name,
     'source' => $_SERVER['HTTP_REFERER'],
-    'last_update' => date(DATE_W3C)
+    // 'last_update' => date(DATE_W3C)
+    'last_update' => date("d-m-Y H:i")
   ];
   $form_list[] = $form_list_item;
 
