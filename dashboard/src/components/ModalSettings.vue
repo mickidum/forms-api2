@@ -3,6 +3,8 @@
 		<span class="close" @click="closeModal">&times;</span>
 		<form @submit.prevent="saveSettings" class="pure-form pure-form-stacked">
 				<!-- {{settingsItem}} -->
+
+				<!-- ITEMS NAMES BLOCK -->
 				<template v-if="settingsItem.items_names">
 					<div class="heading">
 						<span @click="toggleEditItems" class="pure-button button-xsmall button-warning">{{!editItems ? 'open' : 'close'}}</span>&nbsp;
@@ -10,15 +12,18 @@
 						<span>( change items titles )</span>
 					</div>
 					<template v-if="editItems">
-						<div v-for="item in settingsItem.items_names" class="items-names">
-							<label class="settings-input-item">
-						      			{{item.name}}
-								<input type="text" v-model="item.title">
-							</label>
+						<div class="validate-container">
+							<div v-for="item in settingsItem.items_names" class="items-names">
+								<label class="settings-input-item">
+							      			{{item.name}}
+									<input type="text" v-model="item.title">
+								</label>
+							</div>
 						</div>
 					</template>
 				</template>
-
+				
+				<!-- VALIDATION BLOCK -->
 				<template v-if="settingsItem.validation">
 					<div class="heading">
 						<span @click="toggleEditValidation" class="pure-button button-xsmall button-warning">{{!editValidation ? 'open' : 'close'}}</span>&nbsp;
@@ -26,13 +31,14 @@
 						<span>( set validation rules )</span>
 					</div>
 					<template v-if="editValidation">
+						{{settingsItem.validation}}
 						<div class="items-names">
 							<span 
 								@click="settingsItem.validation.validate = !settingsItem.validation.validate" 
 								v-model="settingsItem.validation.validate" 
 								:class="['pure-button button-xsmall', settingsItem.validation.validate ? 'button-error' : 'button-success']"
 								>
-								{{!settingsItem.validation.validate ? 'Validate' : 'Don\'t Validate'}}
+								{{!settingsItem.validation.validate ? 'Click for validate' : 'Click for disable validation'}}
 							</span>
 
 							<div class="validate-container" v-if="settingsItem.items_names">
@@ -48,10 +54,21 @@
 								</div>
 							</div>
 
+							<div class="validate-container" v-if="settingsItem.validation.messages">
+								<strong>Messages</strong>
+								<div v-for="(item, key) in settingsItem.validation.messages" class="items-names">
+									<label class="settings-input-item">
+								      			{{key}}
+										<input type="text" v-model="settingsItem.validation.messages[key]">
+									</label>
+								</div>
+							</div>
+
 						</div>
 					</template>
 				</template>
-
+				
+				<!-- EMAIL SENDING BLOCK -->
 				<template v-if="settingsItem.mail">
 					<div class="heading">
 						<span @click="toggleMailSending" class="pure-button button-xsmall button-warning">{{!editMailSending ? 'open' : 'close'}}</span>&nbsp;
