@@ -31,27 +31,31 @@
 						<span>( set validation rules )</span>
 					</div>
 					<template v-if="editValidation">
-						{{settingsItem.validation}}
 						<div class="items-names">
-							<span 
-								@click="settingsItem.validation.validate = !settingsItem.validation.validate" 
-								v-model="settingsItem.validation.validate" 
-								:class="['pure-button button-xsmall', settingsItem.validation.validate ? 'button-error' : 'button-success']"
-								>
-								{{!settingsItem.validation.validate ? 'Click for validate' : 'Click for disable validation'}}
-							</span>
+							
 
-							<div class="validate-container" v-if="settingsItem.items_names">
-								<strong>Items to validate</strong>
-								<div v-for="item in settingsItem.items_names" class="validate-items">
-									<label 
-										v-if="item.name !== 'date'"
-										:class="['custom-ch', checkValidate(item.name) ? 'custom-ch-checked' : null]"
-									>
-									<input type="checkbox" v-model="settingsItem.validation.validate_items" :value="item.name">
-									</label>
-									<span>{{item.name == 'date' ? null : item.title}}</span>
-								</div>
+							<div class="validate-container">
+									<span 
+										style="display: inline-block; margin: 10px 0;" 
+										@click="settingsItem.validation.validate = !settingsItem.validation.validate" 
+										v-model="settingsItem.validation.validate" 
+										:class="['pure-button button-small', settingsItem.validation.validate ? 'button-error' : 'button-success']"
+										>
+										{{!settingsItem.validation.validate ? 'Click for validate' : 'Click for disable validation'}}
+									</span>
+									<br>
+								<template v-if="settingsItem.items_names">
+									<strong>Items to validate</strong>
+									<div v-for="item in settingsItem.items_names" class="validate-items">
+										<label 
+											v-if="item.name !== 'date'"
+											:class="['custom-ch', checkValidate(item.name) ? 'custom-ch-checked' : null]"
+										>
+										<input type="checkbox" v-model="settingsItem.validation.validate_items" :value="item.name">
+										</label>
+										<span>{{item.name == 'date' ? null : item.title}}</span>
+									</div>
+								</template>
 							</div>
 
 							<div class="validate-container" v-if="settingsItem.validation.messages">
@@ -76,13 +80,23 @@
 						<span>( set email rules )</span>
 					</div>
 					<template v-if="editMailSending">
-						<!-- <div v-for="item in settingsItem.items_names" class="items-names">
-							<label class="settings-input-item">
-						      			{{item.name}}
-								<input type="text" v-model="item.title">
-							</label>
-						</div> -->
-						{{settingsItem.mail}}
+						<div class="validate-container">
+							<div v-for="(item, key) in settingsItem.mail" class="items-names">
+								<span 
+									style="margin: 10px 0;" 
+									v-if="key === 'send'"
+									@click="settingsItem.mail.send = !settingsItem.mail.send" 
+									v-model="settingsItem.mail.send" 
+									:class="['pure-button button-small', settingsItem.mail.send ? 'button-error' : 'button-success']"
+									>
+									{{!settingsItem.mail.send ? 'Click for enable mail' : 'Click for disable mail'}}
+								</span>
+								<label v-else class="settings-input-item">
+							      {{key}}
+									<input type="text" v-model="settingsItem.mail[key]">
+								</label>
+							</div>
+						</div>
 					</template>
 				</template>
 
@@ -101,8 +115,8 @@
 		data() {
 			return {
 				editItems: false,
-				editValidation: true,
-				editMailSending: false
+				editValidation: false,
+				editMailSending: true
 			}
 		},
 		props: [
