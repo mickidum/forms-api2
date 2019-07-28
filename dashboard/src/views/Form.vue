@@ -1,5 +1,6 @@
 <template>
 	<div v-if="form" class="cont">
+		<!-- <pre>{{form}}</pre> -->
 		<div class="single-form">
 			<div class="form-menu">
 				<span v-if="settings" @click="editSettings(settings)" class="settings">Settings</span>
@@ -58,11 +59,11 @@
 			></modal-edit>
 		</div>
 	
-		<div v-if="settingsItem" class="edit-modal">
+		<div v-if="settingsItem" class="edit-modal settilngs-modal">
 			<modal-settings
 			:settingsItem="settingsItem"
 			@closeModal="closeModal"
-			@saveItem="saveItem(settingsItem)"
+			@saveSettings="saveSettings"
 			></modal-settings>
 		</div>
 
@@ -151,7 +152,15 @@
 				// return
 				const items = this.items
 				items.splice(index, 1, item)
-				this.updateForm(items)
+				this.updateForm()
+				this.closeModal()
+			},
+			saveSettings(form) {
+				let upd = confirm('Save Settings?')
+				if (!upd) {
+					return
+				}
+				this.updateForm(form)
 				this.closeModal()
 			},
 			flatArray(arr) {
@@ -162,7 +171,7 @@
 			},
 			updateForm(items) {
 				const form = this.form
-				form.items = items
+				form.items = items ? items : this.items
 				this.$store.dispatch('updateCurrentForm', form)
 			},
 			closeModal() {

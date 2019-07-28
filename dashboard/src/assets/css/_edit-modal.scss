@@ -38,6 +38,17 @@
     		display: none;
     	}
     }
+    .settings-input-item {
+      font-weight: bold;
+      margin-bottom: 10px;
+      input, textarea {
+        font-weight: normal;
+        width: 100%;
+      }
+      textarea {
+        min-height: 100px;
+      }
+    }
     .input-item1 {
     	font-weight: bold;
     	margin-bottom: 10px;
@@ -92,6 +103,10 @@
         color: white;
         background-color: red;
       }
+    }
+    .heading {
+      display: flex;
+      align-items: center;
     }
   }
 }

@@ -1,31 +1,43 @@
 <template>
-	<div class="inner">
+	<div class="inner" v-if="settingsItem">
 		<span class="close" @click="closeModal">&times;</span>
-		<form @submit.prevent="saveItem" class="pure-form pure-form-stacked">
-			<div>
+		<form @submit.prevent="saveSettings" class="pure-form pure-form-stacked">
 				<!-- {{settingsItem}} -->
-				<template v-for="(item, key) in settingsItem">
-					<!-- <label class="input-item" v-if="!ifArray(item)">
-					      			{{key}}
-						<input type="text" v-model="settingsItem[key]">
-					</label>
-					<div class="is-array input-item" v-else>
-			      <p>
-			      	{{key}} 
-			      	<span 
-							 class="pure-button button-xsmall button-secondary" 
-							 @click="addField(key)">
-							 add field
-							</span>
-				    </p>
-						<div class="delete-field" v-for="(i, index) in item">
-							<input type="text" v-model="settingsItem[key][index]" :placeholder="'name of ' + key">
-							<span @click="delField(index, key)">-</span>
+				<template v-if="settingsItem.items_names">
+					<div class="heading">
+						<span @click="toggleEditItems" class="pure-button button-xsmall button-warning">{{!editItems ? 'open' : 'close'}}</span>&nbsp;
+						<h3>Items Names</h3>&nbsp;
+						<span>( change items titles )</span>
+					</div>
+					<template v-if="editItems">
+						<div v-for="item in settingsItem.items_names" class="items-names">
+							<label class="settings-input-item">
+						      			{{item.name}}
+								<input type="text" v-model="item.title">
+							</label>
 						</div>
-					</div> -->
-					<pre>{{key}} : {{item}}</pre>
+					</template>
 				</template>
-			</div>
+
+				<template v-if="settingsItem.validation">
+					<div class="heading">
+						<span @click="toggleEditValidation" class="pure-button button-xsmall button-warning">{{!editValidation ? 'open' : 'close'}}</span>&nbsp;
+						<h3>Enable Validation</h3>&nbsp;
+						<span>( set validation rules )</span>
+					</div>
+					<template v-if="editValidation">
+						<!-- <div v-for="item in settingsItem.items_names" class="items-names">
+							<label class="settings-input-item">
+						      			{{item.name}}
+								<input type="text" v-model="item.title">
+							</label>
+						</div> -->
+						{{settingsItem.validation}}
+					</template>
+				</template>
+
+				
+				<!-- <pre>{{settingsItem}}</pre> -->
 			<p>
 				<button type="submit" class="pure-button pure-button-primary">Save Settings</button>&nbsp;
 				<button @click.prevent="closeModal" class="pure-button button-secondary pure-button-primary">Cancel</button>
@@ -36,15 +48,28 @@
 
 <script>
 	export default {
+		data() {
+			return {
+				editItems: false,
+				editValidation: false,
+				editMailSending: false
+			}
+		},
 		props: [
-			'settingsItem'
+			'settingsItem',
 		],
 		methods: {
 			closeModal() {
 				this.$emit('closeModal');
 			},
-			saveItem(item) {
-				this.$emit('saveItem', item);
+			saveSettings() {
+				this.$emit('saveSettings');
+			},
+			toggleEditItems() {
+				this.editItems = !this.editItems
+			},
+			toggleEditValidation() {
+				this.editValidation = !this.editValidation
 			}
 		}
 	}
