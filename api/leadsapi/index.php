@@ -171,12 +171,12 @@ $app->post('/newlead', function (Request $request, Response $response, array $ar
 
     if ($validation['validate'] && count($validation['validate_items'])) {
 
-      validations($validation, $items);
-      $response = $response->withJson(validations($validation, $items), 400, JSON_UNESCAPED_UNICODE);
+      $validate_status = validations($validation, $items);
 
-    } else {
-
-      $response = $response->withJson($resp_object, 201, JSON_UNESCAPED_UNICODE);
+      if (!$validate_status['success']) {
+        $response = $response->withJson($validate_status, 400, JSON_UNESCAPED_UNICODE);
+        return $response;
+      } 
 
     }
 
@@ -210,7 +210,7 @@ $app->post('/newlead', function (Request $request, Response $response, array $ar
     $json_file = fopen('../data/' . $form_json_file_name, 'w');
     fwrite($json_file, $json_encode_file);
     fclose($json_file);
-
+    $response = $response->withJson($resp_object, 201, JSON_UNESCAPED_UNICODE);
   }
   	return $response;
 });
@@ -255,19 +255,17 @@ function validations($validation, $items) {
       'message' => $validation['messages']['error'],
       'items' => $validate_items_error
     ];
-    echo json_encode($validation_object);
-    exit();
+  }
 
-  } else {
+  else {
 
     $validation_object = [
       'success' => true,
       'message' => $validation['messages']['success']
     ];
 
-    return $validation_object;
-
   }
+  return $validation_object;
 }
 
 $app->run();

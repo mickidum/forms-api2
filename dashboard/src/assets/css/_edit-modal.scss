@@ -107,6 +107,41 @@
     .heading {
       display: flex;
       align-items: center;
+      margin-bottom: 20px;
+    }
+  }
+}
+
+.validate-container {
+  position: relative;
+  margin: 15px 0;
+  padding: 10px;
+  background-color: rgba(192, 192, 192, 0.24);
+}
+
+.validate-items {
+  display: flex;
+  align-items: center;
+  .custom-ch {
+    display: block;
+    border: solid 1px black;
+    width: 20px;
+    height: 20px;
+    margin: 10px 5px 8px;
+    line-height: 1;
+    cursor: pointer;
+    text-align: center;
+    border-radius: 50%;
+    &.custom-ch-checked::after {
+      content: "";
+      display: inline-block;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background-color: #32ca32;
+    }
+    input {
+      display: none;
     }
   }
 }
