@@ -26,9 +26,15 @@ elseif(isset($_POST['submit'])){
 		$htaccess .= 'RewriteRule (.*) index.html [L]' . "\r\n";
 		$htaccess .= '</IfModule>';
 
-		$fo = fopen('crm/.htaccess', 'w');
-		fwrite($fo, $htaccess);
-		fclose($fo);
+		$htaccess_file = fopen('crm/.htaccess', 'w');
+		fwrite($htaccess_file, $htaccess);
+		fclose($htaccess_file);
+		
+		$index_html_content = file_get_contents('crm/index.html');
+		$index_html_file = fopen('crm/index.html', 'w');
+		$index_html_content = str_replace('<base href=/ >', '<base href="'. $request_uri .'/">', $index_html_content);
+		fwrite($index_html_file, $index_html_content);
+		fclose($index_html_file);
 
 	 	$env = fopen('.env', 'w');
 	 	fwrite($env, $create_env_string);
