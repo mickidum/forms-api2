@@ -26,53 +26,53 @@ $app = new \Slim\App;
 
 $app->post('/newlead', function (Request $request, Response $response, array $args) {
 
-	$default_settings_array = [
-	  'items_names' => [],
-	  'validation' => [
-	    'validate' => false,
-	    'validate_items' => [],
-	    'messages' => [
-	      'success' => 'Thank you for subscribing',
-	      'error' => 'There Error while validating'
-	    ]
-	  ],
-	  'mail' => [
-	    'send' => false,
-	    'to' => 'usermail@example.com',
-	    'from' => 'siteowner',
-	    'subject' => 'New message from ',
-	    'message_header' => 'New Subscriber Added'
-	  ]
-	];
+  $default_settings_array = [
+    'items_names' => [],
+    'validation' => [
+      'validate' => false,
+      'validate_items' => [],
+      'messages' => [
+        'success' => 'Thank you for subscribing',
+        'error' => 'There Error while validating'
+      ]
+    ],
+    'mail' => [
+      'send' => false,
+      'to' => 'usermail@example.com',
+      'from' => 'siteowner',
+      'subject' => 'New message from ',
+      'message_header' => 'New Subscriber Added'
+    ]
+  ];
 
-	$resp_object = [
-	  'success' => true,
-	  'message' => 'OK'
-	];
+  $resp_object = [
+    'success' => true,
+    'message' => 'OK'
+  ];
 
-	$resp_object_error = [
-	  'success' => false,
-	  'message' => 'Bad Request - a form_name_id field must be sent'
-	];
+  $resp_object_error = [
+    'success' => false,
+    'message' => 'Bad Request - a form_name_id field must be sent'
+  ];
 
-	$form_list = [];
-	$items = [];
-	$items_names = [];
+  $form_list = [];
+  $items = [];
+  $items_names = [];
 
-	// $items_names[] = [
+  // $items_names[] = [
  //    'name' => 'item_id',
  //    'title' => 'ID'
  //  ];
   
-	$items['item_id'] = uniqid();
+  $items['item_id'] = uniqid();
 
-	$safe_post = array_map('test_input', $request->getParsedBody());
+  $safe_post = array_map('test_input', $request->getParsedBody());
 
-	if (empty($safe_post['form_name_id'])) {
-	  $response = $response->withJson($resp_object_error, 400, JSON_UNESCAPED_UNICODE);
-	}
+  if (empty($safe_post['form_name_id'])) {
+    $response = $response->withJson($resp_object_error, 400, JSON_UNESCAPED_UNICODE);
+  }
 
-	foreach ($safe_post as $key => $value) {
+  foreach ($safe_post as $key => $value) {
     if ($key !== "form_name" and $key !== "form_name_id" and $key !== "g-recaptcha-response") {
       // $items_names[] = $key;
       $items_names[] = [
@@ -87,9 +87,9 @@ $app->post('/newlead', function (Request $request, Response $response, array $ar
     'name' => 'date',
     'title' => 'Date'
   ];
-	$items['date'] = date("d-m-Y H:i");
+  $items['date'] = date("d-m-Y H:i");
 
-	// FORM ID
+  // FORM ID
   $form_name_id = sanitize_file_name($safe_post['form_name_id']);
   // FORM READABLE NAME
   $form_name = $safe_post['form_name'] ? $safe_post['form_name'] : $form_name_id;
@@ -191,15 +191,26 @@ $app->post('/newlead', function (Request $request, Response $response, array $ar
       $message_header = "<table style='border: solid 1px #000; padding:5px 15px;'><tr><th colspan='2'><h2><strong>" . $mail_sending['message_header'] ."</strong></h2></th></tr>";
       $message_footer = "</table>";
       $message = '';
+
+      $items_names_last_array = json_decode($json_file_array, true);
+      $names_for_email = $items_names_last_array['settings']['items_names'];
+      
       foreach ($safe_post as $key => $value) {
         if (is_array($value)) {
           $value = implode(', ', $value);
         }
+
+        foreach ($names_for_email as $item) {
+          if ($item['name'] === $key) {
+            $key = $item['title'];
+          }
+        }
+
         if ($key !== "form_name" and $key !== "form_name_id") {
           $message .= "<tr><th style='text-align: inherit; padding: 5px 10px; border-top:dotted 1px #000;border-left:dotted 1px #000;'><strong>{$key}</strong></th><td style='padding: 5px 10px; border-top:dotted 1px #000;'>{$value}</td></tr>";
         }
       }
-
+      
       $message = $message_header.$message.$message_footer;
 
       @mail($to, $subject, $message, $headers);
@@ -212,7 +223,7 @@ $app->post('/newlead', function (Request $request, Response $response, array $ar
     fclose($json_file);
     $response = $response->withJson($resp_object, 201, JSON_UNESCAPED_UNICODE);
   }
-  	return $response;
+    return $response;
 });
 
 // HELPERS AND FUNCTIONS
@@ -269,4 +280,3 @@ function validations($validation, $items) {
 }
 
 $app->run();
-
