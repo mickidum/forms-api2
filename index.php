@@ -1,6 +1,7 @@
 <?php 
-if (!file_exists('.env')) {
-	echo "Exists";
+if (file_exists('.env')) {
+	header("Location: crm"); 
+  exit; 
 }
 elseif(isset($_POST['submit'])){
 	
@@ -14,9 +15,26 @@ elseif(isset($_POST['submit'])){
 	  $create_env_string .= 'LOGIN='. $login . "\r\n";
 	  $create_env_string .= 'PASSWORD='. $password . "\r\n";
 
+	  $request_uri = $_SERVER['REQUEST_URI']. 'crm';
+
+		$htaccess = '<IfModule mod_rewrite.c>' . "\r\n";
+		$htaccess .= 'RewriteEngine On' . "\r\n";
+		$htaccess .= 'RewriteBase '. $request_uri . "\r\n";
+		$htaccess .= 'RewriteRule ^index\.html$ - [L]' . "\r\n";
+		$htaccess .= 'RewriteCond %{REQUEST_FILENAME} !-f' . "\r\n";
+		$htaccess .= 'RewriteCond %{REQUEST_FILENAME} !-d' . "\r\n";
+		$htaccess .= 'RewriteRule (.*) index.html [L]' . "\r\n";
+		$htaccess .= '</IfModule>';
+
+		$fo = fopen('crm/.htaccess', 'w');
+		fwrite($fo, $htaccess);
+		fclose($fo);
+
 	 	$env = fopen('.env', 'w');
 	 	fwrite($env, $create_env_string);
 	 	fclose($env);
+	 	header("Location: crm"); 
+  	exit; 
 	} else {
 		echo '<div class="error">Error, Password must be minimum 5 symbols<br>Login minimum 3 symbols</div>';
 	}

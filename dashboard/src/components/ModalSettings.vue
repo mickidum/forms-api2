@@ -116,7 +116,7 @@
 			return {
 				editItems: false,
 				editValidation: false,
-				editMailSending: true
+				editMailSending: false
 			}
 		},
 		props: [
