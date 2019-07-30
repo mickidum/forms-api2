@@ -3,27 +3,29 @@
 		<span class="close" @click="closeModal">&times;</span>
 		<form @submit.prevent="saveItem" class="pure-form pure-form-stacked">
 			<div>
-				<template v-for="(item, key) in editableItem">
-					<label class="input-item" v-if="!ifArray(item)">
-					  <template v-if="key !== 'item_id' && key !== 'date'">
-							{{key}}
-					  	<input type="text" v-model="editableItem[key]">
-					  </template>
-					</label>
-					<div class="is-array input-item" v-else>
-			      <p>
-			      	{{key}} 
-			      	<span 
-							 class="pure-button button-xsmall button-secondary" 
-							 @click="addField(key)">
-							 add field
-							</span>
-				    </p>
-						<div class="delete-field" v-for="(i, index) in item">
-							<input type="text" v-model="editableItem[key][index]" :placeholder="'name of ' + key">
-							<span @click="delField(index, key)">-</span>
+				<template v-for="t in itemsTitles">
+					<template v-if="t.name === key" v-for="(item, key) in editableItem">
+						<label class="input-item" v-if="!ifArray(item)">
+						  <template v-if="key !== 'item_id' && key !== 'date'">
+								{{t.title}}
+						  	<input type="text" v-model="editableItem[key]">
+						  </template>
+						</label>
+						<div class="is-array input-item" v-else>
+				      <p>
+				      	{{t.title}} 
+				      	<span 
+								 class="pure-button button-xsmall button-secondary" 
+								 @click="addField(key)">
+								 add field
+								</span>
+					    </p>
+							<div class="delete-field" v-for="(i, index) in item">
+								<input type="text" v-model="editableItem[key][index]" :placeholder="'name of ' + key">
+								<span @click="delField(index, key)">-</span>
+							</div>
 						</div>
-					</div>
+					</template>
 				</template>
 			</div>
 			<p>
