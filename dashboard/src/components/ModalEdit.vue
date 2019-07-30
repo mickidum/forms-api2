@@ -5,8 +5,10 @@
 			<div>
 				<template v-for="(item, key) in editableItem">
 					<label class="input-item" v-if="!ifArray(item)">
-					      			{{key}}
-						<input type="text" v-model="editableItem[key]">
+					  <template v-if="key !== 'item_id' && key !== 'date'">
+							{{key}}
+					  	<input type="text" v-model="editableItem[key]">
+					  </template>
 					</label>
 					<div class="is-array input-item" v-else>
 			      <p>
@@ -35,7 +37,8 @@
 <script>
 	export default {
 		props: [
-			'editableItem'
+			'editableItem',
+			'itemsTitles'
 		],
 		methods: {
 			closeModal() {

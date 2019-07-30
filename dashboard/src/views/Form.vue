@@ -54,6 +54,7 @@
 		<div v-if="editableItem" class="edit-modal">
 			<modal-edit
 			:editableItem="editableItem"
+			:itemsTitles="itemsNames"
 			@closeModal="closeModal"
 			@saveItem="saveItem(editableItem)"
 			></modal-edit>
@@ -135,7 +136,6 @@
 			},
 			editItem(item, index) {
 				this.editableItem = Object.assign({}, item)
-				// this.editableIndex = index
 			},
 			editSettings(item) {
 				this.settingsItem = Object.assign({}, item)
@@ -177,6 +177,7 @@
 			closeModal() {
 				this.editableItem = null
 				this.settingsItem = null
+				this.itemsTitles = null
 			}
 		},
 		mounted() {
