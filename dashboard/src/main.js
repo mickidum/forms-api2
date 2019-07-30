@@ -5,6 +5,7 @@ import store from './store'
 import  Axios  from  'axios'
 
 import './assets/css/pure-min.css'
+import './assets/css/grids-responsive-min.css'
 import './assets/css/main.scss'
 
 Vue.config.productionTip = false

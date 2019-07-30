@@ -110,6 +110,11 @@
       margin-bottom: 20px;
     }
   }
+  &.settilngs-modal {
+    .inner {
+      max-width: 1000px;
+    }
+  }
 }
 
 .validate-container {
