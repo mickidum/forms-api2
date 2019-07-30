@@ -1,6 +1,8 @@
 <template>
 	<div class="inner" v-if="settingsItem">
-		<span class="close" @click="closeModal">&times;</span>
+		<div class="close">
+			<span @click="closeModal">&times;</span>
+		</div>
 		<form @submit.prevent="saveSettings" class="pure-form pure-form-stacked">
 				<!-- {{settingsItem}} -->
 				<div class="pure-g">

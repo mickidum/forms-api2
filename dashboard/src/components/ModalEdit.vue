@@ -1,6 +1,8 @@
 <template>
 	<div class="inner">
-		<span class="close" @click="closeModal">&times;</span>
+		<div class="close">
+			<span @click="closeModal">&times;</span>
+		</div>
 		<form @submit.prevent="saveItem" class="pure-form pure-form-stacked">
 			<div>
 				<template v-for="t in itemsTitles">

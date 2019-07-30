@@ -17,11 +17,18 @@
     max-width: 480px;
     .close {
     	position: absolute;
-	    right: 8px;
-	    top: 5px;
+      display: flex;
+      justify-content: flex-end;
+      padding: 3px 9px;
+      width: 100%;
+	    right: 0;
+	    top: 0;
 	    font-size: 36px;
 	    line-height: 0.8;
-	    cursor: pointer;
+      display: flex;
+      span {
+        cursor: pointer;
+      }
     }
     .input-item {
     	font-weight: bold;

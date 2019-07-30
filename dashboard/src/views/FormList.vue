@@ -49,7 +49,7 @@
 		position: relative;
 		display: flex;
 		// align-items: center;
-		// flex-wrap: wrap;
+		flex-wrap: wrap;
 		a {
 			text-decoration: none;
 		}
@@ -62,10 +62,14 @@
 			padding: 15px;
 			border-radius: 4px;
 			margin-bottom: 15px;
+			max-width: 31%;
 			&:hover {
 				box-shadow: 0 0 10px silver;
 			}
 			.inners {
+				span, a {
+					word-break: break-all;
+				}
 				&.first {
 					// font-weight: 500;
 					// color: blueviolet;
@@ -98,6 +102,9 @@
 	@media screen and (max-width: 800px) {
 		.list {
 			flex-wrap: wrap;
+			.outer-link {
+				max-width: 100%;
+			}
 		}
 	}
 </style>	
