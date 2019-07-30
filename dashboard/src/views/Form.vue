@@ -130,7 +130,7 @@
 				if (!del) {
 					return
 				}
-				this.$store.dispatch('deleteForm', this.form.form_id)
+				this.$store.dispatch('deleteForm', this.form)
 				this.$router.push('/')
 			},
 			editItem(item, index) {

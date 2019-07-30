@@ -128,11 +128,11 @@ export default new Vuex.Store({
 				}
 			})
 		},
-		deleteForm({commit, dispatch}, form_id) {
-			commit('deleteForm', form_id)
-			axios.delete(`${apiUrl}/deleteform/${form_id}`)
+		deleteForm({commit, dispatch}, form) {
+			commit('deleteForm', form.form_id)
+			axios.put(`${apiUrl}/deleteform/${form.form_id}`, this.state.allForms)
 			.then(resp => {
-				commit('deleteForm', form_id)
+				commit('deleteForm', form)
 			})
 			.catch(err => {
 				if (err.response.status === 401) {
