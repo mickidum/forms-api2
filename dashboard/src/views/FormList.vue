@@ -3,7 +3,7 @@
 		<h1>All Forms Here</h1>
 		<div class="list">
 			
-			<router-link class="outer-link" v-for="form in allForms" :to="form.form_id">
+			<router-link class="outer-link" v-for="form in allForms" :key="form.form_id" :to="form.form_id">
 				<div class="card">
 					<div class="inners first"><span>id: </span><span>{{ form.form_id }}</span></div>
 					<h2>{{ form.title }}</h2>
