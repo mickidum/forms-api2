@@ -2,6 +2,7 @@
 node_modules
 /dist
 /crm
+/dashboard1
 
 # local env files
 .env.local
@@ -21,7 +22,7 @@ yarn-error.log*
 *.njsproj
 *.sln
 *.sw?
-*.json
+/api/*.json
 api/data/*.json
 api/settings/*.json
 .env
