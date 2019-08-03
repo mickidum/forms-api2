@@ -7,16 +7,11 @@
       <div>
         <template v-for="t in itemsTitles">
           <template v-if="t.name === key" v-for="(item, key) in editableItem">
-            <label class="input-item" v-if="!ifArray(item) && words(item) <= 3">
-              <template v-if="key !== 'item_id' && key !== 'date'">
+            <label class="input-item" v-if="!ifArray(item)">
+              <template v-focus v-if="key !== 'item_id' && key !== 'date'">
                 {{t.title}}
-                <input type="text" v-model="editableItem[key]" />
-              </template>
-            </label>
-            <label class="input-item" v-if="!ifArray(item) && words(item) > 3">
-              <template v-if="key !== 'item_id' && key !== 'date'">
-                {{t.title}}
-                <textarea v-model="editableItem[key]"></textarea>
+                <input v-if="words(item) <= 3" type="text" v-model="editableItem[key]" />
+                <textarea v-if="words(item) > 3" v-model="editableItem[key]"></textarea>
               </template>
             </label>
             <div class="is-array input-item" v-else-if="ifArray(item)">

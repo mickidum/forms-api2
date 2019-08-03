@@ -1,102 +1,121 @@
 .edit-modal {
-	position: absolute;
-	top: 0;
-	left: 0;
-	width: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
   min-height: 100vh;
   z-index: 5;
   background-color: rgba(0, 0, 0, 0.57);
   display: flex;
   align-items: center;
   justify-content: center;
+
   .inner {
-  	background-color: #fff;
-  	padding: 30px 20px 15px;
-  	position: relative;
-  	width: 100%;
+    background-color: #fff;
+    padding: 30px 20px 15px;
+    position: relative;
+    width: 100%;
     max-width: 480px;
+
     .close {
-    	position: absolute;
+      position: absolute;
       display: flex;
       justify-content: flex-end;
       padding: 3px 9px;
       width: 100%;
-	    right: 0;
-	    top: 0;
-	    font-size: 36px;
-	    line-height: 0.8;
+      right: 0;
+      top: 0;
+      font-size: 36px;
+      line-height: 0.8;
       display: flex;
+
       span {
         cursor: pointer;
       }
     }
+
     .input-item {
-    	font-weight: bold;
-    	margin-bottom: 10px;
-    	input, textarea {
-    		font-weight: normal;
-    		width: 100%;
-    	}
-      textarea {
-        min-height: 100px;
-      }
-    	// &:first-child, 
-     //  &:last-child {
-    	// 	display: none;
-    	// }
-    }
-    .settings-input-item {
-      font-weight: 500;
+      font-weight: bold;
       margin-bottom: 10px;
-      input, textarea {
+
+      input,
+      textarea {
         font-weight: normal;
         width: 100%;
       }
+
+      textarea {
+        min-height: 100px;
+      }
+
+    }
+
+    .settings-input-item {
+      font-weight: 500;
+      margin-bottom: 10px;
+
+      input,
+      textarea {
+        font-weight: normal;
+        width: 100%;
+      }
+
       textarea {
         min-height: 100px;
       }
     }
+
     .input-item1 {
-    	font-weight: 500;
-    	margin-bottom: 10px;
-    	input {
-    		font-weight: normal;
-    		width: 100%;
-    	}
+      font-weight: 500;
+      margin-bottom: 10px;
+
+      input {
+        font-weight: normal;
+        width: 100%;
+      }
     }
+
     .is-array {
-    	position: relative;
-    	p {
-    		font-weight: bold;
-    		// background-color: gray;
-    		padding: 6px 5px;
-    		line-height: 1;
-    		// color: #fff;
-    		margin-bottom: 0;
-    	}
-    	input {
-    		width: 100%;
-    	}
-    }
-    &.inner-login {
-    	padding: 15px;
-      max-width: 280px;
+      position: relative;
+
+      p {
+        font-weight: bold;
+        // background-color: gray;
+        padding: 6px 5px;
+        line-height: 1;
+        // color: #fff;
+        margin-bottom: 0;
+      }
+
       input {
         width: 100%;
       }
+    }
+
+    &.inner-login {
+      padding: 15px;
+      max-width: 280px;
+
+      input {
+        width: 100%;
+      }
+
       h1 {
         font-size: 20px;
       }
     }
-      .delete-field {
+
+    .delete-field {
       position: relative;
       margin-bottom: 10px;
       display: flex;
       align-items: center;
       justify-content: space-between;
+
       input {
         max-width: 89%;
       }
+
       span {
         display: inline-block;
         font-size: 30px;
@@ -111,12 +130,14 @@
         background-color: red;
       }
     }
+
     .heading {
       display: flex;
       align-items: center;
       margin-bottom: 20px;
     }
   }
+
   &.settilngs-modal {
     .inner {
       max-width: 1000px;
@@ -134,6 +155,7 @@
 .validate-items {
   display: flex;
   align-items: center;
+
   .custom-ch {
     display: block;
     border: solid 1px black;
@@ -144,6 +166,7 @@
     cursor: pointer;
     text-align: center;
     border-radius: 50%;
+
     &.custom-ch-checked::after {
       content: "";
       display: inline-block;
@@ -152,6 +175,7 @@
       border-radius: 50%;
       background-color: #32ca32;
     }
+
     input {
       display: none;
     }
