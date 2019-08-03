@@ -9,46 +9,39 @@
       </span>
     </header>
 
-    <transition
-      name="fade"
-      mode="out-in"
-    >
-    <router-view></router-view>
+    <transition name="fade" mode="out-in">
+      <router-view></router-view>
     </transition>
   </div>
 </template>
 
 <script>
-  
-  export default {
-    computed : {
-      isLoggedIn(){ 
-        return this.$store.getters.isLoggedIn
-      },
-      getTime() {
-        return Math.floor(Date.now() / 1000)
-      }
+export default {
+  computed: {
+    isLoggedIn() {
+      return this.$store.getters.isLoggedIn;
     },
-    methods: {
-      logout() {
-        this.$store.dispatch('logout')
-        .then(() => {
-          this.$router.push('/login')
-        })
-      },
-      refreshToken() {
-        let now = +this.getTime
-        let expires = +localStorage.getItem('expires') || now
-        console.log(expires)
-        console.log(now)
-        let refresh = expires - now;
-        console.log('Refresh :', refresh);
-        if (refresh > 0) {
-          let start = setInterval(() => {
-            console.log('ping')
-          }, refresh * 1000)
-        }
+    getTime() {
+      return Math.floor(Date.now() / 1000);
+    }
+  },
+  methods: {
+    logout() {
+      this.$store.dispatch("logout");
+    },
+    refreshToken() {
+      let now = +this.getTime;
+      let expires = +localStorage.getItem("expires") || now;
+      console.log(expires);
+      console.log(now);
+      let refresh = expires - now;
+      console.log("Refresh :", refresh);
+      if (refresh > 0) {
+        let start = setInterval(() => {
+          console.log("ping");
+        }, refresh * 1000);
       }
     }
   }
+};
 </script>
