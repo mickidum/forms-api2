@@ -37,8 +37,8 @@ $app->post('/token', function (Request $request, Response $response, array $args
 		if ($login === getenv('LOGIN') and $password === getenv('PASSWORD')) {
 
 			$now = new DateTime();
-			// $future = new DateTime("now +2 hours");
-			$future = new DateTime("now +5 seconds");
+			$future = new DateTime("now +2 hours");
+			// $future = new DateTime("now +5 seconds");
 			// $server = $request->getServerParams();
 
 			$payload = [
