@@ -48,8 +48,12 @@
 <script>
 export default {
   props: ["editableItem", "itemsTitles"],
+  mounted() {
+    document.body.classList.add("no-scroll");
+  },
   methods: {
     closeModal() {
+      document.body.classList.remove("no-scroll");
       this.$emit("closeModal");
     },
     saveItem(item) {
