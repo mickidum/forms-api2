@@ -93,16 +93,10 @@ $app->put('/deleteform/{form_id}', function (Request $request, Response $respons
 	if (file_exists('../api/data/form_reg_' . $name . '.json')) {
 		unlink('../api/data/form_reg_' . $name . '.json');
 
-		// if (file_exists('../api/settings/form-list.json')) {
-		// 	$data = file_get_contents('../api/settings/form-list.json');
-		// $data = json_decode($data, true);
-		// $index = array_search($name, $data);
-		// array_splice($data, $index, 1);
 		$json_file = fopen('../api/forms-list/form-list.json', 'w');
 		$json_encode_file = json_encode($body, JSON_UNESCAPED_UNICODE);
 		fwrite($json_file, $json_encode_file);
 		fclose($json_file);
-		// }
 
 		$response = $response->withJson([
 			'status' => 'success',
