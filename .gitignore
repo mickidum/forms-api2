@@ -1,7 +1,6 @@
 .DS_Store
 node_modules
 /dist
-/crm
 /dashboard1
 
 # local env files

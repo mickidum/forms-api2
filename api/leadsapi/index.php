@@ -69,21 +69,27 @@ $app->post('/newlead', function (Request $request, Response $response, array $ar
     'message' => 'Bad Request - a form_name_id field must be sent'
   ];
 
+  $resp_object_error_m = [
+    'success' => false,
+    'message' => 'Bad Request - a recent Form fields are not equal to initial Form. For make changes in current form fields delete this form and send new or change form_name_id and use new form!!!'
+  ];
+
   $form_list = [];
   $items = [];
   $items_names = [];
 
   // $items_names[] = [
- //    'name' => 'item_id',
- //    'title' => 'ID'
- //  ];
-  
+  //    'name' => 'item_id',
+  //    'title' => 'ID'
+  //  ];
+
   $items['item_id'] = uniqid();
 
   $safe_post = array_map('test_input', $request->getParsedBody());
 
   if (empty($safe_post['form_name_id'])) {
     $response = $response->withJson($resp_object_error, 400, JSON_UNESCAPED_UNICODE);
+    return $response;
   }
 
   foreach ($safe_post as $key => $value) {
@@ -121,16 +127,15 @@ $app->post('/newlead', function (Request $request, Response $response, array $ar
   $form_list[] = $form_list_item;
 
   // LIST OF FORMS FILE CREATING
-  if (!file_exists('../settings/' . $form_list_file_name)) {
+  if (!file_exists('../forms-list/' . $form_list_file_name)) {
 
-    $settings_file = fopen('../settings/' . $form_list_file_name, 'w');
+    $settings_file = fopen('../forms-list/' . $form_list_file_name, 'w');
     $form_list_json = json_encode($form_list, JSON_UNESCAPED_UNICODE);
     fwrite($settings_file, $form_list_json);
     fclose($settings_file);
-
   } else {
 
-    $form_list_json = file_get_contents('../settings/' . $form_list_file_name);
+    $form_list_json = file_get_contents('../forms-list/' . $form_list_file_name);
     $form_temp_array = json_decode($form_list_json, true);
 
     foreach ($form_temp_array as $index => $form) {
@@ -138,9 +143,9 @@ $app->post('/newlead', function (Request $request, Response $response, array $ar
         array_splice($form_temp_array, $index, 1);
       }
     }
-    
+
     array_push($form_temp_array, $form_list_item);
-    $settings_file = fopen('../settings/' . $form_list_file_name, 'w');
+    $settings_file = fopen('../forms-list/' . $form_list_file_name, 'w');
     $form_list_json = json_encode($form_temp_array, JSON_UNESCAPED_UNICODE);
     fwrite($settings_file, $form_list_json);
     fclose($settings_file);
@@ -151,7 +156,7 @@ $app->post('/newlead', function (Request $request, Response $response, array $ar
 
     $json_file = fopen('../data/' . $form_json_file_name, 'w');
     $default_settings_array['items_names'] = $items_names;
-    
+
     $json_file_array = [
       'form_id' => $form_name_id,
       'form_name' => $form_name,
@@ -166,14 +171,27 @@ $app->post('/newlead', function (Request $request, Response $response, array $ar
     fclose($json_file);
 
     $response = $response->withJson($resp_object, 201, JSON_UNESCAPED_UNICODE);
-
   } else {
 
     $json_file_array = file_get_contents('../data/' . $form_json_file_name);
-    
+
     $temp_array = json_decode($json_file_array, true);
 
     $temp_array['form_name'] = $form_name;
+
+    // CHECK IF INITIAL FORM IS EQUAL TO RECENT FORM
+    $fields_items_names = [];
+
+    foreach ($temp_array['settings']['items_names'] as $value) {
+      $fields_items_names[$value['name']] = $value['title'];
+    }
+
+    $fields_items_names['item_id'] = '';
+
+    if (!keys_are_equal($fields_items_names, $items)) {
+      $response = $response->withJson($resp_object_error_m, 400, JSON_UNESCAPED_UNICODE);
+      return $response;
+    }
 
     array_push($temp_array['items'], $items);
 
@@ -190,8 +208,7 @@ $app->post('/newlead', function (Request $request, Response $response, array $ar
       if (!$validate_status['success']) {
         $response = $response->withJson($validate_status, 400, JSON_UNESCAPED_UNICODE);
         return $response;
-      } 
-
+      }
     }
 
     if ($mail_sending['send']) {
@@ -202,13 +219,13 @@ $app->post('/newlead', function (Request $request, Response $response, array $ar
 
       $subject = $mail_sending['subject'] . ' - ' . str_replace('_', ' ', $form_name);
 
-      $message_header = "<table style='border: solid 1px #000; padding:5px 15px;'><tr><th colspan='2'><h2><strong>" . $mail_sending['message_header'] ."</strong></h2></th></tr>";
+      $message_header = "<table style='border: solid 1px #000; padding:5px 15px;'><tr><th colspan='2'><h2><strong>" . $mail_sending['message_header'] . "</strong></h2></th></tr>";
       $message_footer = "</table>";
       $message = '';
 
       $items_names_last_array = json_decode($json_file_array, true);
       $names_for_email = $items_names_last_array['settings']['items_names'];
-      
+
       foreach ($safe_post as $key => $value) {
         if (is_array($value)) {
           $value = implode(', ', $value);
@@ -224,8 +241,8 @@ $app->post('/newlead', function (Request $request, Response $response, array $ar
           $message .= "<tr><th style='text-align: inherit; padding: 5px 10px; border-top:dotted 1px #000;border-left:dotted 1px #000;'><strong>{$key}</strong></th><td style='padding: 5px 10px; border-top:dotted 1px #000;'>{$value}</td></tr>";
         }
       }
-      
-      $message = $message_header.$message.$message_footer;
+
+      $message = $message_header . $message . $message_footer;
 
       @mail($to, $subject, $message, $headers);
     }
@@ -237,7 +254,7 @@ $app->post('/newlead', function (Request $request, Response $response, array $ar
     fclose($json_file);
     $response = $response->withJson($resp_object, 201, JSON_UNESCAPED_UNICODE);
   }
-    return $response;
+  return $response;
 });
 
 // CORS
@@ -249,7 +266,8 @@ $app->post('/newlead', function (Request $request, Response $response, array $ar
 
 // HELPERS AND FUNCTIONS
 
-function test_input($data) {
+function test_input($data)
+{
   if (is_array($data)) {
     $data = array_map('test_input', $data);
     return $data;
@@ -261,24 +279,24 @@ function test_input($data) {
   return $data;
 }
 
-function sanitize_file_name( $filename ) {
+function sanitize_file_name($filename)
+{
   $filename = preg_replace(array('/\s/', '/\.[\.]+/', '/[^\w_\.\-]/'), array('_', '.', ''), $filename);
   return $filename;
 }
 
-function validations($validation, $items) {
+function validations($validation, $items)
+{
   $validate_items_error = [];
 
   foreach ($validation['validate_items'] as $v_item) {
-    
+
     foreach ($items as $key => $value) {
 
       if (($v_item == $key && !$value)) {
         $validate_items_error[] = $v_item;
       }
-
     }
-
   }
 
   if (count($validate_items_error)) {
@@ -287,17 +305,19 @@ function validations($validation, $items) {
       'message' => $validation['messages']['error'],
       'items' => $validate_items_error
     ];
-  }
-
-  else {
+  } else {
 
     $validation_object = [
       'success' => true,
       'message' => $validation['messages']['success']
     ];
-
   }
   return $validation_object;
+}
+
+function keys_are_equal($array1, $array2)
+{
+  return !array_diff_key($array1, $array2) && !array_diff_key($array2, $array1);
 }
 
 $app->run();
