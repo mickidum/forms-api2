@@ -1,6 +1,8 @@
 <?php
+$request_path = rtrim($_SERVER['REQUEST_URI'], '/') . '/';
+
 if (file_exists('.env')) {
-	header("Location: crm");
+	header("Location: " . $request_path . "crm");
 	exit;
 } elseif (isset($_POST['submit'])) {
 
@@ -14,7 +16,7 @@ if (file_exists('.env')) {
 		$create_env_string .= 'LOGIN=' . $login . "\r\n";
 		$create_env_string .= 'PASSWORD=' . $password . "\r\n";
 
-		$request_uri = $_SERVER['REQUEST_URI'] . 'crm';
+		$request_uri = $request_path . 'crm';
 
 		$htaccess = '<IfModule mod_rewrite.c>' . "\r\n";
 		$htaccess .= 'RewriteEngine On' . "\r\n";
@@ -25,11 +27,11 @@ if (file_exists('.env')) {
 		$htaccess .= 'RewriteRule (.*) index.html [L]' . "\r\n";
 		$htaccess .= '</IfModule>';
 
-		$htaccess_file = fopen('crm/.htaccess', 'w');
+		$htaccess_file = fopen($request_uri . '/.htaccess', 'w');
 		fwrite($htaccess_file, $htaccess);
 		fclose($htaccess_file);
 
-		$index_html_content = file_get_contents('crm/index.html');
+		$index_html_content = file_get_contents($request_uri . '/index.html');
 		$index_html_file = fopen('crm/index.html', 'w');
 		$index_html_content = str_replace('<head>', '<head><base href="' . $request_uri . '/">', $index_html_content);
 		fwrite($index_html_file, $index_html_content);
@@ -38,7 +40,7 @@ if (file_exists('.env')) {
 		$env = fopen('.env', 'w');
 		fwrite($env, $create_env_string);
 		fclose($env);
-		header("Location: crm");
+		header("Location: " . $request_uri);
 		exit;
 	} else {
 		echo '<div class="error">Error, Password must be minimum 5 symbols<br>Login minimum 3 symbols</div>';
@@ -54,7 +56,7 @@ if (file_exists('.env')) {
 	<meta charset="UTF-8">
 	<title>Create New User</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-	<link rel="stylesheet" href="css/foundation.css">
+	<link rel="stylesheet" href="<?php echo $request_path; ?>css/foundation.css">
 	<style>
 		.error {
 			position: absolute;
@@ -111,10 +113,7 @@ if (file_exists('.env')) {
 </head>
 
 <body>
-
-
 	<div class="all-wrap">
-
 		<div class="all-wrap-inner">
 			<h1>Create Admin Account</h1>
 			<form id="login" method="post" autocomplete="off">

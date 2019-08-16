@@ -30,18 +30,30 @@
         </form>
         <p :class="[status === 'error' ? 'error' : '']">{{status}}</p>
       </div>
-      <p>For reset login and password delete file '.env'</p>
+      <p>
+        For reset login and password delete file '.env'
+        and
+        <a
+          style="color:#0078e7;"
+          :href="userUrl"
+        >follow link</a>
+      </p>
     </div>
   </div>
 </template>
 
 <script>
+import { config } from "../config";
+const newUserUrl =
+  process.env.NODE_ENV === "production" ? config.userUrl : config.userDevUrl;
+
 export default {
   name: "Login",
   data() {
     return {
       username: "admin",
-      password: "qazwsx"
+      password: "qazwsx",
+      userUrl: newUserUrl
     };
   },
   computed: {
