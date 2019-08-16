@@ -31,7 +31,7 @@ if (file_exists('.env')) {
 
 		$index_html_content = file_get_contents('crm/index.html');
 		$index_html_file = fopen('crm/index.html', 'w');
-		$index_html_content = str_replace('<base href=/ >', '<base href="' . $request_uri . '/">', $index_html_content);
+		$index_html_content = str_replace('<head>', '<head><base href="' . $request_uri . '/">', $index_html_content);
 		fwrite($index_html_file, $index_html_content);
 		fclose($index_html_file);
 
