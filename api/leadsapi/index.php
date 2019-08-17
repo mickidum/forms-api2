@@ -14,7 +14,7 @@ use Psr\Http\Message\ResponseInterface as Response;
 
 require '../../vendor/autoload.php';
 
-session_start();
+// session_start();
 
 $app = new \Slim\App;
 
@@ -238,22 +238,22 @@ $app->post('/newlead', function (Request $request, Response $response, array $ar
 });
 
 // CORS
-$app->options('/{routes:.+}', function ($request, $response, $args) {
-  return $response;
-});
+// $app->options('/{routes:.+}', function ($request, $response, $args) {
+//   return $response;
+// });
 
-$app->add(function ($req, $res, $next) {
-  $response = $next($req, $res);
-  return $response
-    ->withHeader('Access-Control-Allow-Origin', '*')
-    ->withHeader('Access-Control-Allow-Headers', 'X-Requested-With, Content-Type, Accept, Origin, Authorization')
-    ->withHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, PATCH, OPTIONS');
-});
+// $app->add(function ($req, $res, $next) {
+//   $response = $next($req, $res);
+//   return $response
+//     ->withHeader('Access-Control-Allow-Origin', '*')
+//     ->withHeader('Access-Control-Allow-Headers', 'X-Requested-With, Content-Type, Accept, Origin, Authorization')
+//     ->withHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, PATCH, OPTIONS');
+// });
 
-$app->map(['GET', 'POST', 'PUT', 'DELETE', 'PATCH'], '/{routes:.+}', function ($req, $res) {
-  $handler = $this->notFoundHandler; // handle using the default Slim page not found handler
-  return $handler($req, $res);
-});
+// $app->map(['GET', 'POST', 'PUT', 'DELETE', 'PATCH'], '/{routes:.+}', function ($req, $res) {
+//   $handler = $this->notFoundHandler; // handle using the default Slim page not found handler
+//   return $handler($req, $res);
+// });
 
 function test_input($data)
 {

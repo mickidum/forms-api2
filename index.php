@@ -27,11 +27,11 @@ if (file_exists('.env')) {
 		$htaccess .= 'RewriteRule (.*) index.html [L]' . "\r\n";
 		$htaccess .= '</IfModule>';
 
-		$htaccess_file = fopen($request_uri . '/.htaccess', 'w');
+		$htaccess_file = fopen('crm/.htaccess', 'w');
 		fwrite($htaccess_file, $htaccess);
 		fclose($htaccess_file);
 
-		$index_html_content = file_get_contents($request_uri . '/index.html');
+		$index_html_content = file_get_contents('crm/index.html');
 		$index_html_file = fopen('crm/index.html', 'w');
 		$index_html_content = str_replace('<head>', '<head><base href="' . $request_uri . '/">', $index_html_content);
 		fwrite($index_html_file, $index_html_content);
