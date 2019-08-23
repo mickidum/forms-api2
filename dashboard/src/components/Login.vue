@@ -51,8 +51,8 @@ export default {
   name: "Login",
   data() {
     return {
-      username: "admin",
-      password: "qazwsx",
+      username: "",
+      password: "",
       userUrl: newUserUrl
     };
   },

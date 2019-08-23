@@ -18,6 +18,14 @@ if (file_exists('.env')) {
 
 		$request_uri = $request_path . 'crm';
 
+		$env = fopen('.env', 'w');
+		if (empty($env)) {
+			echo '<div style="padding: 5px;color: red;background: black;font-weight: bold;">Error, Unable to create file .env<br>Check files permissions</div>';
+			return;
+		}
+		fwrite($env, $create_env_string);
+		fclose($env);
+
 		$htaccess = '<IfModule mod_rewrite.c>' . "\r\n";
 		$htaccess .= 'RewriteEngine On' . "\r\n";
 		$htaccess .= 'RewriteBase ' . $request_uri . "\r\n";
@@ -33,13 +41,11 @@ if (file_exists('.env')) {
 
 		$index_html_content = file_get_contents('crm/index.html');
 		$index_html_file = fopen('crm/index.html', 'w');
+		$index_html_content= str_replace('<base href="' . $request_uri . '/">', '', $index_html_content);
 		$index_html_content = str_replace('<head>', '<head><base href="' . $request_uri . '/">', $index_html_content);
 		fwrite($index_html_file, $index_html_content);
 		fclose($index_html_file);
 
-		$env = fopen('.env', 'w');
-		fwrite($env, $create_env_string);
-		fclose($env);
 		header("Location: " . $request_uri);
 		exit;
 	} else {
