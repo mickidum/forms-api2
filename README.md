@@ -1,27 +1,33 @@
-# Form API for websites
+# Form API 2 for websites
 
-## How to use
-Download this repo unzip and rename to 'forms-api' \
+- This release required PHP 7.2 +
+- For release PHP 5 - PHP 7.0 check [https://github.com/mickidum/forms-api2-php5](https://github.com/mickidum/forms-api2-php5)
+
+Download this repo, unzip and you can rename it \
 Upload this folder to your hosting(probably to public_html). \
 Follow to steps below.
 
-Two fields must be sent POST to '/forms-api/api/api.php':
+## First create admin account:
+
+- Go to the forms-api2 folder (for example: 'your-domain-name.com/forms-api')
+- Fill the username and password
+- After send will be created .env file with hash credentials
+
+## How to use
+
+Two fields must be sent POST to '/forms-api2/api/leadsapi/newlead':
+
 1. form_name_id -> "example_contact_form_name"
 2. event_name -> "Example contact form - homepage"
 
 ## Login
 
-path to login: 'your-domain-name.com/forms-api': \
-username: 'admin' \
-password: 'admin'
+- path to login: 'path-to-forms-api2/crm'
+- For changing username and password just delete .env and Go to the forms-api2 folder.
 
-For changing username and password use 'Hash helper' - 'your-domain-name.com/forms-api/hashme.php'. \
-Insert username and password and copy generated string. \
-Open 'forms-api/index.php' and replace default admin string with generated.
+## Contact Form 7 Example:
 
-## Contact Form 7 Example: 
-
-Consider your site is 'your-domain-name.com' and 'forms-api' folder is located in 'public_html' directory, then full path will be 'your-domain-name.com/forms-api'.
+Consider your site is 'your-domain-name.com' and 'forms-api2' folder is located in 'public_html' directory, then full path for new lead will be 'your-domain-name.com/forms-api2/api/leadsapi/newlead'.
 
 In wordpress admin Contact form tab insert tags:
 
@@ -38,14 +44,4 @@ jQuery('.wpcf7').on('wpcf7mailsent', function(event) {
 });
 </pre>
 
-## CORS and validation
-
-CORS is disabled by default. \
-If you need CORS just open '/forms-api/api/api.php' and uncomment three headers. Also in '/forms-api/.htaccess uncomment 3 lines.
-
-Validation is disabled too. \
-If you need server side validation you probably should handle errors by yourself, example is comented in '/forms-api/api/api.php' file.
-
 ## END
-
-
