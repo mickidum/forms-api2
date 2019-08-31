@@ -12,7 +12,7 @@ $dotenv->load();
 $app = new Slim\App;
 
 $app->add(new Tuupola\Middleware\JwtAuthentication([
-	"secure" => getenv('SECURE'),
+	"secure" => filter_var(getenv('SECURE'), FILTER_VALIDATE_BOOLEAN),
 	"secret" => getenv('JWT_SECRET'),
 	"ignore" => "/token",
 	"error" => function ($response, $arguments) {
@@ -93,7 +93,7 @@ $app->put('/deleteform/{form_id}', function (Request $request, Response $respons
 	if (file_exists('../api/data/form_reg_' . $name . '.json')) {
 		unlink('../api/data/form_reg_' . $name . '.json');
 
-		$json_file = fopen('../api/forms-list/form-list.json', 'w');
+		$json_file = fopen('../api/formslist/form-list.json', 'w');
 		$json_encode_file = json_encode($body, JSON_UNESCAPED_UNICODE);
 		fwrite($json_file, $json_encode_file);
 		fclose($json_file);
@@ -113,8 +113,8 @@ $app->put('/deleteform/{form_id}', function (Request $request, Response $respons
 });
 
 $app->get('/getlist', function (Request $request, Response $response, array $args) {
-	if (file_exists('../api/forms-list/form-list.json')) {
-		$data = file_get_contents('../api/forms-list/form-list.json');
+	if (file_exists('../api/formslist/form-list.json')) {
+		$data = file_get_contents('../api/formslist/form-list.json');
 		$data = json_decode($data, true);
 		$response = $response->withJson($data, 200, JSON_UNESCAPED_UNICODE);
 	}

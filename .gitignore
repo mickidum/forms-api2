@@ -24,5 +24,6 @@ yarn-error.log*
 /api/*.json
 api/data/*.json
 api/settings/*.json
+api/formslist/*.json
 .env
 crm/.htaccess
